@@ -1,0 +1,1672 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Scholarship Store</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<style>
+:root{--bg:#f0ede6;--surface:#e8e4db;--surface2:#dedad0;--border:#c8c3b5;--accent:#1a1a1a;--accent2:#5a4a3a;--gold:#8a6a2a;--green:#2e6a4a;--red:#b83232;--text:#1a1a1a;--muted:#7a7060;--card-bg:#edeae2;--header-bg:#1a1a1a;--header-text:#f0ede6;}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;min-height:100vh;line-height:1.6;}
+header{background:var(--header-bg);border-bottom:1px solid #333;padding:16px 40px;position:sticky;top:0;z-index:100;}
+.header-inner{max-width:1320px;margin:0 auto;display:flex;align-items:center;gap:20px;flex-wrap:wrap;}
+.logo-area{display:flex;align-items:center;gap:14px;}
+.logo-img-wrap{height:40px;display:flex;align-items:center;}
+.logo-img-wrap img{height:40px;width:auto;filter:invert(1) brightness(0.92);}
+.logo-text{display:flex;flex-direction:column;line-height:1.1;}
+.logo-title{font-family:'Playfair Display',serif;font-weight:700;font-size:1.25rem;color:var(--header-text);}
+.logo-sub{font-size:0.7rem;letter-spacing:0.12em;text-transform:uppercase;color:#9a9080;}
+.header-right{margin-left:auto;display:flex;align-items:center;gap:12px;}
+.result-badge{background:#2a2a2a;border:1px solid #444;border-radius:100px;padding:5px 14px;font-size:0.82rem;color:#9a9080;}
+.result-badge strong{color:#c8b99a;font-weight:600;}
+.cart-btn{background:var(--bg);color:var(--accent);border:none;border-radius:100px;padding:7px 16px;font-family:'DM Sans',sans-serif;font-size:0.82rem;font-weight:600;cursor:pointer;display:flex;align-items:center;gap:7px;transition:all 0.18s;}
+.cart-btn:hover{background:#dedad0;}
+.cart-count{background:var(--red);color:#fff;border-radius:50%;width:18px;height:18px;display:inline-flex;align-items:center;justify-content:center;font-size:0.65rem;font-weight:700;}
+.cart-count.hidden{display:none;}
+.nav-tabs{background:var(--surface);border-bottom:1px solid var(--border);padding:0 40px;}
+.nav-tabs-inner{max-width:1320px;margin:0 auto;display:flex;gap:0;}
+.nav-tab{padding:12px 22px;font-size:0.82rem;font-weight:500;cursor:pointer;border-bottom:2px solid transparent;color:var(--muted);transition:all 0.18s;background:none;border-top:none;border-left:none;border-right:none;font-family:'DM Sans',sans-serif;}
+.nav-tab:hover{color:var(--accent);}
+.nav-tab.active{color:var(--accent);border-bottom-color:var(--accent);}
+.page{display:none;}.page.active{display:block;}
+.layout{display:grid;grid-template-columns:300px 1fr;max-width:1320px;margin:0 auto;min-height:calc(100vh - 120px);}
+aside{background:var(--surface);border-right:1px solid var(--border);padding:28px 24px;position:sticky;top:120px;height:calc(100vh - 120px);overflow-y:auto;scrollbar-width:thin;scrollbar-color:var(--border) transparent;}
+aside::-webkit-scrollbar{width:4px;}
+aside::-webkit-scrollbar-thumb{background:var(--border);border-radius:4px;}
+.section-title{font-family:'Playfair Display',serif;font-size:0.66rem;letter-spacing:0.14em;text-transform:uppercase;color:var(--muted);margin-bottom:12px;display:flex;align-items:center;gap:6px;}
+.section-title::after{content:'';flex:1;height:1px;background:var(--border);}
+.filter-block{margin-bottom:20px;}
+.filter-label{font-size:0.78rem;font-weight:500;color:var(--muted);margin-bottom:8px;}
+input[type="number"],input[type="text"],input[type="email"],select{width:100%;background:var(--bg);border:1px solid var(--border);color:var(--text);padding:9px 12px;border-radius:8px;font-family:'DM Sans',sans-serif;font-size:0.88rem;outline:none;transition:border-color 0.2s;appearance:none;}
+input:focus,select:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(26,26,26,0.08);}
+input::placeholder{color:var(--muted);}
+.chip-group{display:flex;flex-wrap:wrap;gap:6px;}
+.chip{padding:5px 12px;border-radius:100px;border:1px solid var(--border);background:transparent;color:var(--muted);font-size:0.78rem;cursor:pointer;transition:all 0.18s;font-family:'DM Sans',sans-serif;white-space:nowrap;}
+.chip:hover{border-color:var(--accent);color:var(--accent);}
+.chip.active{background:var(--accent);border-color:var(--accent);color:var(--bg);font-weight:500;}
+.toggle-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:9px;}
+.toggle-row label{font-size:0.82rem;color:var(--text);cursor:pointer;}
+.toggle{position:relative;width:36px;height:20px;background:var(--border);border-radius:100px;cursor:pointer;transition:background 0.2s;flex-shrink:0;}
+.toggle::after{content:'';position:absolute;width:14px;height:14px;border-radius:50%;background:white;top:3px;left:3px;transition:transform 0.2s;}
+.toggle.on{background:var(--accent);}
+.toggle.on::after{transform:translateX(16px);}
+.reset-btn{width:100%;padding:9px;background:transparent;border:1px solid var(--border);color:var(--muted);border-radius:8px;cursor:pointer;font-family:'DM Sans',sans-serif;font-size:0.84rem;transition:all 0.2s;margin-top:6px;}
+.reset-btn:hover{border-color:var(--accent);color:var(--accent);}
+main{padding:28px 32px;}
+.sort-bar{display:flex;align-items:center;gap:10px;margin-bottom:20px;flex-wrap:wrap;}
+.sort-bar span{font-size:0.8rem;color:var(--muted);}
+.sort-chip{padding:4px 12px;border-radius:100px;border:1px solid var(--border);background:transparent;color:var(--muted);font-size:0.78rem;cursor:pointer;transition:all 0.18s;font-family:'DM Sans',sans-serif;}
+.sort-chip:hover{border-color:var(--accent);color:var(--accent);}
+.sort-chip.active{background:var(--accent);border-color:var(--accent);color:var(--bg);}
+.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(310px,1fr));gap:16px;}
+.card{background:var(--card-bg);border:1.5px solid var(--border);border-radius:14px;padding:20px;transition:border-color 0.2s,transform 0.2s,box-shadow 0.2s;display:flex;flex-direction:column;gap:10px;cursor:pointer;position:relative;}
+.card:hover{border-color:var(--accent);transform:translateY(-2px);box-shadow:0 8px 28px rgba(26,26,26,0.1);}
+.card.in-cart{border-color:var(--green);background:#e8f0eb;}
+.card-badges{display:flex;gap:5px;flex-wrap:wrap;}
+.badge{font-size:0.63rem;font-weight:600;letter-spacing:0.07em;text-transform:uppercase;padding:3px 8px;border-radius:100px;}
+.badge-scholarship{background:rgba(26,26,26,0.08);color:#3a3020;border:1px solid rgba(26,26,26,0.15);}
+.badge-competition{background:rgba(90,74,58,0.1);color:var(--accent2);border:1px solid rgba(90,74,58,0.2);}
+.badge-projected{background:rgba(138,106,42,0.1);color:var(--gold);border:1px solid rgba(138,106,42,0.2);}
+.badge-employee{background:rgba(46,106,74,0.1);color:var(--green);border:1px solid rgba(46,106,74,0.2);}
+.badge-duesoon{background:rgba(184,50,50,0.12);color:var(--red);border:1px solid rgba(184,50,50,0.3);}
+.badge-incart{background:rgba(46,106,74,0.15);color:var(--green);border:1px solid rgba(46,106,74,0.3);}
+.card-name{font-family:'Playfair Display',serif;font-weight:700;font-size:0.94rem;line-height:1.3;color:var(--text);}
+.card-org{font-size:0.78rem;color:var(--muted);}
+.award-line{font-family:'Playfair Display',serif;font-weight:700;font-size:1.25rem;color:var(--green);}
+.award-line.trip{font-size:0.88rem;color:var(--gold);font-weight:600;font-family:'DM Sans',sans-serif;}
+.award-line.varies{font-size:0.92rem;color:var(--muted);font-weight:600;font-family:'DM Sans',sans-serif;}
+.meta-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px;}
+.meta-item{display:flex;flex-direction:column;gap:1px;}
+.meta-key{font-size:0.63rem;text-transform:uppercase;letter-spacing:0.08em;color:var(--muted);}
+.meta-val{font-size:0.78rem;color:var(--text);}
+.req-pills{display:flex;flex-wrap:wrap;gap:5px;}
+.req-pill{font-size:0.67rem;padding:3px 9px;border-radius:100px;border:1px solid var(--border);color:var(--muted);}
+.req-pill.yes{border-color:rgba(90,74,58,0.35);color:var(--accent2);}
+.card-actions{display:flex;gap:8px;margin-top:auto;padding-top:4px;}
+.btn-cart{flex:1;padding:7px 10px;border-radius:8px;font-size:0.78rem;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all 0.18s;border:1.5px solid var(--green);background:transparent;color:var(--green);}
+.btn-cart:hover{background:var(--green);color:#fff;}
+.btn-cart.remove{border-color:var(--red);color:var(--red);}
+.btn-cart.remove:hover{background:var(--red);color:#fff;}
+.btn-info{padding:7px 12px;border-radius:8px;font-size:0.78rem;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all 0.18s;border:1.5px solid var(--border);background:transparent;color:var(--muted);}
+.btn-info:hover{border-color:var(--accent);color:var(--accent);}
+.empty{grid-column:1/-1;text-align:center;padding:80px 20px;color:var(--muted);}
+.empty h3{font-family:'Playfair Display',serif;font-size:1.1rem;margin-bottom:6px;color:var(--text);}
+.cal-page{padding:28px 32px;max-width:1320px;margin:0 auto;}
+.cal-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:24px;}
+.cal-header h2{font-family:'Playfair Display',serif;font-size:1.4rem;}
+.cal-nav{display:flex;align-items:center;gap:12px;}
+.cal-nav-btn{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:7px 14px;cursor:pointer;font-family:'DM Sans',sans-serif;font-size:0.84rem;transition:all 0.18s;}
+.cal-nav-btn:hover{border-color:var(--accent);}
+.cal-month-label{font-family:'Playfair Display',serif;font-size:1.1rem;font-weight:600;min-width:160px;text-align:center;}
+.cal-legend{display:flex;gap:16px;margin-bottom:18px;flex-wrap:wrap;}
+.cal-legend-item{display:flex;align-items:center;gap:6px;font-size:0.78rem;color:var(--muted);}
+.cal-legend-dot{width:10px;height:10px;border-radius:50%;}
+.cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:2px;}
+.cal-day-header{text-align:center;font-size:0.7rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--muted);padding:8px 0;}
+.cal-day{background:var(--card-bg);border:1px solid var(--border);border-radius:8px;height:110px;padding:8px;position:relative;overflow:hidden;}
+.cal-day.other-month{background:var(--surface);opacity:0.5;}
+.cal-day.today{border-color:var(--accent);border-width:2px;}
+.cal-day-num{font-size:0.78rem;font-weight:600;color:var(--muted);margin-bottom:4px;}
+.cal-day.today .cal-day-num{color:var(--accent);}
+.cal-event{font-size:0.6rem;padding:2px 5px;border-radius:4px;margin-bottom:2px;cursor:pointer;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;line-height:1.4;transition:opacity 0.15s;}
+.cal-event:hover{opacity:0.8;}
+.cal-event.opens{background:rgba(46,106,74,0.15);color:var(--green);border-left:2px solid var(--green);font-weight:400;}
+.cal-event.closes{background:rgba(184,50,50,0.12);color:var(--red);border-left:2px solid var(--red);font-weight:400;}
+.cal-event.duesoon{background:rgba(184,50,50,0.25);color:var(--red);font-weight:700;}
+.cart-page{padding:28px 32px;max-width:900px;margin:0 auto;}
+.cart-page h2{font-family:'Playfair Display',serif;font-size:1.5rem;margin-bottom:8px;}
+.cart-page .subtitle{color:var(--muted);font-size:0.88rem;margin-bottom:28px;}
+.cart-empty{text-align:center;padding:80px 20px;color:var(--muted);}
+.cart-empty h3{font-family:'Playfair Display',serif;font-size:1.1rem;margin-bottom:8px;color:var(--text);}
+.cart-items{display:flex;flex-direction:column;gap:14px;margin-bottom:32px;}
+.cart-item{background:var(--card-bg);border:1px solid var(--border);border-radius:14px;padding:20px;display:grid;grid-template-columns:1fr auto;gap:16px;align-items:start;}
+.cart-item-left{}
+.cart-item-badges{display:flex;gap:5px;flex-wrap:wrap;margin-bottom:8px;}
+.cart-item-name{font-family:'Playfair Display',serif;font-weight:700;font-size:1rem;margin-bottom:3px;}
+.cart-item-org{font-size:0.8rem;color:var(--muted);margin-bottom:10px;}
+.cart-item-award{font-family:'Playfair Display',serif;font-weight:700;font-size:1.2rem;color:var(--green);margin-bottom:10px;}
+.cart-item-award.trip{font-size:0.9rem;color:var(--gold);font-family:'DM Sans',sans-serif;}
+.cart-item-summary{font-size:0.8rem;color:var(--muted);line-height:1.6;margin-bottom:10px;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;}
+.cart-item-meta{display:flex;flex-wrap:wrap;gap:10px;}
+.cart-meta-tag{display:flex;align-items:center;gap:5px;font-size:0.75rem;color:var(--text);background:var(--surface);border:1px solid var(--border);padding:3px 10px;border-radius:100px;}
+.cart-meta-icon{font-size:0.8rem;}
+.cart-item-right{display:flex;flex-direction:column;align-items:flex-end;gap:10px;}
+.cart-remove-btn{background:none;border:1px solid var(--border);color:var(--muted);border-radius:8px;padding:6px 12px;cursor:pointer;font-size:0.75rem;font-family:'DM Sans',sans-serif;transition:all 0.18s;}
+.cart-remove-btn:hover{border-color:var(--red);color:var(--red);}
+.cart-link{display:inline-flex;align-items:center;gap:5px;color:var(--bg);background:var(--accent);font-size:0.78rem;text-decoration:none;font-weight:500;padding:7px 14px;border-radius:7px;transition:all 0.18s;}
+.cart-link:hover{background:var(--accent2);}
+.cart-summary-box{background:var(--header-bg);color:var(--header-text);border-radius:16px;padding:28px;margin-bottom:24px;}
+.cart-summary-box h3{font-family:'Playfair Display',serif;font-size:1.1rem;margin-bottom:16px;color:#c8b99a;}
+.cart-summary-stats{display:grid;grid-template-columns:repeat(5,1fr);gap:16px;margin-bottom:18px;}
+.cart-stat{text-align:center;}
+.cart-stat-val{font-family:'Playfair Display',serif;font-size:1.6rem;font-weight:700;color:#f0ede6;}
+.cart-stat-key{font-size:0.7rem;text-transform:uppercase;letter-spacing:0.1em;color:#9a9080;margin-top:2px;}
+.cart-actions{display:flex;gap:12px;flex-wrap:wrap;}
+.btn-primary{padding:12px 24px;background:var(--bg);color:var(--accent);border:none;border-radius:8px;font-weight:600;font-family:'DM Sans',sans-serif;font-size:0.88rem;cursor:pointer;transition:all 0.18s;}
+.btn-primary:hover{background:#dedad0;}
+.btn-secondary{padding:12px 24px;background:transparent;color:#9a9080;border:1px solid #444;border-radius:8px;font-family:'DM Sans',sans-serif;font-size:0.88rem;cursor:pointer;transition:all 0.18s;}
+.btn-secondary:hover{border-color:#888;color:var(--header-text);}
+/* CHECKOUT MODAL */
+.checkout-overlay{display:none;position:fixed;inset:0;background:rgba(26,26,26,0.7);z-index:400;align-items:center;justify-content:center;padding:20px;}
+.checkout-overlay.open{display:flex;}
+.checkout-modal{background:var(--bg);border-radius:18px;max-width:480px;width:100%;padding:36px;box-shadow:0 24px 60px rgba(26,26,26,0.3);animation:modalIn 0.2s ease;}
+.checkout-modal h3{font-family:'Playfair Display',serif;font-size:1.3rem;margin-bottom:6px;}
+.checkout-modal .co-sub{color:var(--muted);font-size:0.84rem;margin-bottom:24px;}
+.co-field{margin-bottom:18px;}
+.co-label{font-size:0.78rem;font-weight:600;color:var(--text);margin-bottom:6px;display:block;}
+.co-input{width:100%;background:var(--surface);border:1.5px solid var(--border);color:var(--text);padding:11px 14px;border-radius:10px;font-family:'DM Sans',sans-serif;font-size:0.92rem;outline:none;transition:border-color 0.2s;}
+.co-input:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(26,26,26,0.08);}
+.co-input.error{border-color:var(--red);background:rgba(184,50,50,0.04);}
+.co-error{font-size:0.75rem;color:var(--red);margin-top:5px;display:none;}
+.co-error.visible{display:block;}
+.co-actions{display:flex;gap:10px;margin-top:24px;}
+.co-submit{flex:1;padding:12px;background:var(--accent);color:var(--bg);border:none;border-radius:10px;font-family:'DM Sans',sans-serif;font-size:0.92rem;font-weight:600;cursor:pointer;transition:all 0.18s;}
+.co-submit:hover{background:var(--accent2);}
+.co-cancel{padding:12px 18px;background:transparent;color:var(--muted);border:1px solid var(--border);border-radius:10px;font-family:'DM Sans',sans-serif;font-size:0.92rem;cursor:pointer;transition:all 0.18s;}
+.co-cancel:hover{border-color:var(--accent);color:var(--accent);}
+.co-submit.loading{opacity:0.7;pointer-events:none;}
+/* BACKEND TAB */
+.backend-page{padding:28px 32px;max-width:900px;margin:0 auto;}
+.backend-page h2{font-family:'Playfair Display',serif;font-size:1.5rem;margin-bottom:8px;}
+.backend-login{background:var(--card-bg);border:1px solid var(--border);border-radius:16px;padding:40px;max-width:400px;margin:40px auto;text-align:center;}
+.backend-login h3{font-family:'Playfair Display',serif;font-size:1.1rem;margin-bottom:8px;}
+.backend-login p{color:var(--muted);font-size:0.84rem;margin-bottom:24px;}
+.backend-pw-row{display:flex;gap:10px;}
+.backend-pw-row input{flex:1;}
+.backend-pw-btn{padding:9px 18px;background:var(--accent);color:var(--bg);border:none;border-radius:8px;font-family:'DM Sans',sans-serif;font-size:0.84rem;font-weight:600;cursor:pointer;white-space:nowrap;}
+.backend-pw-err{color:var(--red);font-size:0.78rem;margin-top:8px;display:none;}
+.backend-pw-err.show{display:block;}
+.backend-content{display:none;}
+.backend-content.show{display:block;}
+.backend-header-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;flex-wrap:wrap;gap:12px;}
+.backend-stats{display:flex;gap:16px;flex-wrap:wrap;margin-bottom:24px;}
+.b-stat{background:var(--card-bg);border:1px solid var(--border);border-radius:12px;padding:16px 24px;text-align:center;}
+.b-stat-val{font-family:'Playfair Display',serif;font-size:1.6rem;font-weight:700;}
+.b-stat-key{font-size:0.7rem;text-transform:uppercase;letter-spacing:0.1em;color:var(--muted);margin-top:2px;}
+.backend-table-wrap{overflow-x:auto;}
+.backend-table{width:100%;border-collapse:collapse;font-size:0.82rem;}
+.backend-table th{background:var(--accent);color:var(--bg);padding:10px 14px;text-align:left;font-weight:600;font-size:0.72rem;text-transform:uppercase;letter-spacing:0.06em;}
+.backend-table td{padding:10px 14px;border-bottom:1px solid var(--border);color:var(--text);}
+.backend-table tr:last-child td{border-bottom:none;}
+.backend-table tr:hover td{background:var(--surface);}
+.btn-export{padding:9px 18px;background:var(--green);color:#fff;border:none;border-radius:8px;font-family:'DM Sans',sans-serif;font-size:0.84rem;font-weight:600;cursor:pointer;transition:all 0.18s;}
+.btn-export:hover{background:#245a3c;}
+.btn-clear-data{padding:9px 18px;background:transparent;color:var(--red);border:1px solid var(--red);border-radius:8px;font-family:'DM Sans',sans-serif;font-size:0.84rem;cursor:pointer;transition:all 0.18s;}
+.btn-clear-data:hover{background:var(--red);color:#fff;}
+/* MODAL */
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(26,26,26,0.6);z-index:300;align-items:center;justify-content:center;padding:20px;}
+.modal-overlay.open{display:flex;}
+.modal{background:var(--bg);border-radius:18px;max-width:640px;width:100%;max-height:85vh;overflow-y:auto;padding:32px;box-shadow:0 24px 60px rgba(26,26,26,0.25);animation:modalIn 0.2s ease;position:relative;}
+@keyframes modalIn{from{opacity:0;transform:scale(0.96) translateY(8px);}to{opacity:1;transform:scale(1) translateY(0);}}
+.modal-close{position:absolute;top:16px;right:20px;background:none;border:none;font-size:1.4rem;cursor:pointer;color:var(--muted);}
+.modal-badges{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px;}
+.modal-title{font-family:'Playfair Display',serif;font-weight:700;font-size:1.3rem;line-height:1.3;margin-bottom:4px;}
+.modal-org{font-size:0.85rem;color:var(--muted);}
+.modal-award{font-family:'Playfair Display',serif;font-weight:700;font-size:1.6rem;color:var(--green);margin:14px 0;}
+.modal-award.trip{font-size:1rem;color:var(--gold);font-family:'DM Sans',sans-serif;font-weight:600;}
+.modal-section-label{font-size:0.65rem;text-transform:uppercase;letter-spacing:0.1em;color:var(--muted);margin-bottom:6px;margin-top:18px;}
+.modal-background{font-size:0.88rem;line-height:1.7;color:var(--text);background:var(--surface);border-radius:10px;padding:14px 16px;}
+.modal-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:16px;}
+.modal-meta{display:flex;flex-direction:column;gap:2px;}
+.modal-meta-key{font-size:0.63rem;text-transform:uppercase;letter-spacing:0.08em;color:var(--muted);}
+.modal-meta-val{font-size:0.84rem;color:var(--text);}
+.modal-pills{display:flex;flex-wrap:wrap;gap:6px;margin-top:14px;}
+.modal-pill{font-size:0.72rem;padding:4px 10px;border-radius:100px;border:1px solid var(--border);color:var(--muted);}
+.modal-pill.yes{border-color:rgba(90,74,58,0.35);color:var(--accent2);}
+.modal-footer{display:flex;gap:10px;margin-top:20px;flex-wrap:wrap;}
+.modal-link{display:inline-flex;align-items:center;gap:5px;color:var(--bg);background:var(--accent);font-size:0.85rem;text-decoration:none;font-weight:500;padding:10px 20px;border-radius:8px;transition:all 0.18s;}
+.modal-link:hover{background:var(--accent2);}
+.modal-cart-btn{padding:10px 20px;border-radius:8px;font-size:0.85rem;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all 0.18s;border:1.5px solid var(--green);background:transparent;color:var(--green);}
+.modal-cart-btn:hover{background:var(--green);color:#fff;}
+.modal-cart-btn.remove{border-color:var(--red);color:var(--red);}
+.modal-cart-btn.remove:hover{background:var(--red);color:#fff;}
+.modal-contact{font-size:0.78rem;color:var(--muted);margin-top:8px;}
+@media(max-width:860px){
+  .layout{grid-template-columns:1fr;}
+  aside{position:static;height:auto;border-right:none;border-bottom:1px solid var(--border);}
+  main{padding:20px 16px;}
+  header{padding:14px 20px;}
+  .nav-tabs{padding:0 20px;}
+  .cal-page,.cart-page,.backend-page{padding:20px 16px;}
+  .modal-grid,.cart-summary-stats{grid-template-columns:1fr 1fr;}
+  .cart-item{grid-template-columns:1fr;}
+}
+</style>
+</head>
+<body>
+<header>
+  <div class="header-inner">
+    <div class="logo-area">
+      <div class="logo-img-wrap"><svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <rect width="40" height="40" rx="8" fill="#f0ede6" opacity="0.15"/>
+        <text x="4" y="27" font-family="Georgia, serif" font-weight="900" font-size="20" fill="#f0ede6" letter-spacing="-1">RISE</text>
+        <line x1="4" y1="31" x2="36" y2="31" stroke="#c8b99a" stroke-width="1.5" opacity="0.7"/>
+      </svg></div>
+      <div class="logo-text">
+        <span class="logo-title">Scholarship Store</span>
+        <span class="logo-sub">Opportunity Finder</span>
+      </div>
+    </div>
+    <div class="header-right">
+      <div class="result-badge"><strong id="resultCount">0</strong> matched</div>
+      <button class="cart-btn" onclick="switchTab('cart')">&#x1F6D2; Your Cart <span class="cart-count hidden" id="cartCount">0</span></button>
+    </div>
+  </div>
+</header>
+<div class="nav-tabs">
+  <div class="nav-tabs-inner">
+    <button class="nav-tab active" data-tab="browse" onclick="switchTab('browse')">&#x1F50D; Browse</button>
+    <button class="nav-tab" data-tab="calendar" onclick="switchTab('calendar')">&#x1F4C5; Calendar</button>
+    <button class="nav-tab" data-tab="cart" onclick="switchTab('cart')">&#x1F6D2; Your Cart</button>
+    <button class="nav-tab" data-tab="backend" onclick="switchTab('backend')" id="backendTab" style="display:none">&#x1F512; Admin</button>
+  </div>
+</div>
+
+<!-- CHECKOUT MODAL -->
+<div class="checkout-overlay" id="checkoutOverlay">
+  <div class="checkout-modal">
+    <h3>&#x1F4CB; Checkout Scholarships</h3>
+    <p class="co-sub">To get your personalized scholarship receipt, enter some personal details below.</p>
+    <div class="co-field">
+      <label class="co-label" for="coFirstName">First Name</label>
+      <input class="co-input" type="text" id="coFirstName" placeholder="First Name">
+      <div class="co-error" id="errFirstName">Please enter your first name.</div>
+    </div>
+    <div class="co-field">
+      <label class="co-label" for="coLastName">Last Name</label>
+      <input class="co-input" type="text" id="coLastName" placeholder="Last Name">
+      <div class="co-error" id="errLastName">Please enter your last name.</div>
+    </div>
+    <div class="co-field">
+      <label class="co-label" for="coMajor">Major <span style="color:var(--muted);font-weight:400;">(optional)</span></label>
+      <select class="co-input" id="coMajor" style="background:var(--surface);appearance:none;">
+        <option value="">— Select your major —</option>
+        <option>Accounting</option>
+        <option>Business Administration</option>
+        <option>Business Analytics and Artificial Intelligence (STEM)</option>
+        <option>Computer Information Systems &amp; Technology (STEM)</option>
+        <option>Cybersecurity and Risk Management</option>
+        <option>Finance</option>
+        <option>Global Business</option>
+        <option>Healthcare Management</option>
+        <option>Human Resource Management</option>
+        <option>Marketing</option>
+        <option>Supply Chain Management and Analytics (STEM)</option>
+        <option>Other Major</option>
+      </select>
+    </div>
+    <div class="co-field">
+      <label class="co-label" for="coEmail">UTD Email Address</label>
+      <div style="display:flex;align-items:center;gap:0;">
+        <input class="co-input" type="text" id="coEmail" placeholder="yournetid" style="border-radius:10px 0 0 10px;flex:1;">
+        <span style="background:var(--surface);border:1.5px solid var(--border);border-left:none;border-radius:0 10px 10px 0;padding:11px 12px;font-size:0.88rem;color:var(--muted);white-space:nowrap;font-family:'DM Sans',sans-serif;">@utdallas.edu</span>
+      </div>
+      <div class="co-error" id="errEmail">Please enter your UTD NetID (the part before @utdallas.edu).</div>
+    </div>
+    <div class="co-actions">
+      <button class="co-cancel" onclick="closeCheckout()">Cancel</button>
+      <button class="co-submit" id="coSubmitBtn" onclick="submitCheckout()">&#x2B07; Download Receipt</button>
+    </div>
+  </div>
+</div>
+
+<!-- CARD MODAL -->
+<div class="modal-overlay" id="modalOverlay" onclick="closeModal(event)">
+  <div class="modal" id="modalBox">
+    <button class="modal-close" onclick="closeModalDirect()">&#x2715;</button>
+    <div class="modal-badges" id="modalBadges"></div>
+    <div class="modal-title" id="modalTitle"></div>
+    <div class="modal-org" id="modalOrg"></div>
+    <div class="modal-award" id="modalAward"></div>
+    <div class="modal-section-label">About this opportunity</div>
+    <div class="modal-background" id="modalBackground"></div>
+    <div class="modal-grid" id="modalGrid"></div>
+    <div class="modal-pills" id="modalPills"></div>
+    <div class="modal-footer">
+      <a class="modal-link" id="modalLink" href="#" target="_blank">View &amp; Apply &#x2192;</a>
+      <button class="modal-cart-btn" id="modalCartBtn" onclick="toggleCartFromModal()"></button>
+    </div>
+    <div class="modal-contact" id="modalContact"></div>
+  </div>
+</div>
+
+<!-- BROWSE TAB -->
+<div class="page active" id="page-browse">
+  <div class="layout">
+    <aside>
+      <div class="section-title">Your Profile</div>
+      <div class="filter-block">
+        <div class="filter-label">Academic Year</div>
+        <div class="chip-group" id="yearChips">
+          <button class="chip active" data-val="all">Any</button>
+          <button class="chip" data-val="hs">High School</button>
+          <button class="chip" data-val="freshman">Freshman</button>
+          <button class="chip" data-val="sophomore">Sophomore</button>
+          <button class="chip" data-val="junior">Junior</button>
+          <button class="chip" data-val="senior">Senior</button>
+          <button class="chip" data-val="grad">Graduate</button>
+        </div>
+      </div>
+      <div class="filter-block">
+        <div class="filter-label">GPA</div>
+        <input type="number" id="gpaInput" placeholder="e.g. 3.5" min="0" max="4" step="0.01">
+      </div>
+      <div class="filter-block">
+        <div class="filter-label">Major / Field</div>
+        <div class="chip-group" id="majorChips">
+          <button class="chip active" data-val="all">Any</button>
+          <button class="chip" data-val="business">Business</button>
+          <button class="chip" data-val="marketing">Marketing</button>
+          <button class="chip" data-val="supply_chain">Supply Chain</button>
+          <button class="chip" data-val="finance">Finance / Acct</button>
+          <button class="chip" data-val="stem">STEM</button>
+          <button class="chip" data-val="design">Design / Arch</button>
+          <button class="chip" data-val="cs">CS / Info Systems</button>
+        </div>
+      </div>
+      <div class="filter-block">
+        <div class="filter-label">Citizenship</div>
+        <div class="chip-group" id="statusChips">
+          <button class="chip active" data-val="all">Any</button>
+          <button class="chip" data-val="citizen">US Citizen / Resident</button>
+          <button class="chip" data-val="anyone">Open to Anyone</button>
+        </div>
+      </div>
+      <div class="section-title" style="margin-top:4px">Requirements</div>
+      <div class="filter-block">
+        <div class="toggle-row"><label>Hide if references required</label><div class="toggle" id="toggleRef" onclick="toggleFilter('ref')"></div></div>
+        <div class="toggle-row"><label>Hide if essay/video required</label><div class="toggle" id="toggleEssay" onclick="toggleFilter('essay')"></div></div>
+        <div class="toggle-row"><label>Only show employee scholarships</label><div class="toggle" id="toggleEmployee" onclick="toggleFilter('employee')"></div></div>
+        <div class="toggle-row"><label>Hide if deadline passed</label><div class="toggle" id="toggleExpired" onclick="toggleFilter('expired')"></div></div>
+      </div>
+      <div class="section-title">Timeline</div>
+      <div class="filter-block">
+        <div class="filter-label">Semester</div>
+        <div class="chip-group" id="semesterChips">
+          <button class="chip active" data-val="all">All</button>
+          <button class="chip" data-val="Spring">Spring</button>
+          <button class="chip" data-val="Fall">Fall</button>
+          <button class="chip" data-val="Year">Year Round</button>
+          <button class="chip" data-val="Rolling">Rolling</button>
+        </div>
+      </div>
+      <div class="filter-block">
+        <div class="toggle-row"><label>Hide projected / estimated dates</label><div class="toggle" id="toggleProjected" onclick="toggleFilter('projected')"></div></div>
+      </div>
+      <button class="reset-btn" onclick="resetAll()">&#8635; Reset All Filters</button>
+    </aside>
+    <main>
+      <div class="sort-bar">
+        <span>Sort by</span>
+        <button class="sort-chip active" data-sort="deadline">Deadline <span class="sort-arrow">↑</span></button>
+        <button class="sort-chip" data-sort="award">Award Value <span class="sort-arrow"></span></button>
+        <button class="sort-chip" data-sort="name">Name A–Z <span class="sort-arrow"></span></button>
+      </div>
+      <div class="cards" id="cardsContainer"></div>
+    </main>
+  </div>
+</div>
+
+<!-- CALENDAR TAB -->
+<div class="page" id="page-calendar">
+  <div class="cal-page">
+    <div class="cal-header">
+      <h2>Application Calendar</h2>
+      <div class="cal-nav">
+        <button class="cal-nav-btn" onclick="calNav(-1)">&#8592; Prev</button>
+        <div class="cal-month-label" id="calMonthLabel"></div>
+        <button class="cal-nav-btn" onclick="calNav(1)">Next &#8594;</button>
+      </div>
+    </div>
+    <div class="cal-legend">
+      <div class="cal-legend-item"><div class="cal-legend-dot" style="background:var(--green)"></div> Application Opens</div>
+      <div class="cal-legend-item"><div class="cal-legend-dot" style="background:var(--red)"></div> Application Closes</div>
+    </div>
+    <div class="cal-grid" id="calGrid"></div>
+    <!-- YEAR HEATMAP -->
+    <div style="margin-top:36px;">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;flex-wrap:wrap;gap:10px;">
+        <div style="font-family:'Playfair Display',serif;font-size:1.1rem;font-weight:700;">Deadline Heat Map</div>
+        <div style="display:flex;align-items:center;gap:10px;">
+          <button class="cal-nav-btn" onclick="heatmapYear--;renderHeatmap()" style="padding:5px 12px;font-size:0.78rem;">&#8592;</button>
+          <span id="heatmapYearLabel" style="font-weight:600;min-width:48px;text-align:center;font-size:0.95rem;"></span>
+          <button class="cal-nav-btn" onclick="heatmapYear++;renderHeatmap()" style="padding:5px 12px;font-size:0.78rem;">&#8594;</button>
+        </div>
+      </div>
+      <div style="font-size:0.78rem;color:var(--muted);margin-bottom:6px;">Deadline density by month — see which parts of the year are busiest.</div>
+      <div id="heatmapInsight" style="background:rgba(184,50,50,0.07);border:1px solid rgba(184,50,50,0.2);border-radius:8px;padding:9px 14px;margin-bottom:10px;font-size:0.78rem;color:#7a3030;line-height:1.6;"></div>
+      <div id="heatmapGrid"></div>
+      <div style="display:flex;align-items:center;gap:8px;margin-top:12px;flex-wrap:wrap;">
+        <span style="font-size:0.72rem;color:var(--muted);">Fewer deadlines</span>
+        <div style="display:flex;gap:3px;">
+          <div style="width:16px;height:16px;border-radius:3px;background:#f0ede6;border:1px solid var(--border);"></div>
+          <div style="width:16px;height:16px;border-radius:3px;background:rgba(184,50,50,0.15);border:1px solid rgba(184,50,50,0.2);"></div>
+          <div style="width:16px;height:16px;border-radius:3px;background:rgba(184,50,50,0.35);"></div>
+          <div style="width:16px;height:16px;border-radius:3px;background:rgba(184,50,50,0.6);"></div>
+          <div style="width:16px;height:16px;border-radius:3px;background:#b83232;"></div>
+        </div>
+        <span style="font-size:0.72rem;color:var(--muted);">More deadlines</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- CART TAB -->
+<div class="page" id="page-cart">
+  <div class="cart-page">
+    <h2>Your Cart</h2>
+    <p class="subtitle">Browse and save scholarships, then <strong>checkout your list</strong> to get a personalized reference sheet — a handy reminder of every scholarship you're targeting, what it requires, and when it's due. Great for staying organized all semester!</p>
+    <div id="cartContent"></div>
+  </div>
+</div>
+
+<!-- BACKEND TAB -->
+<div class="page" id="page-backend">
+  <div class="backend-page">
+    <h2>&#x1F512; Admin Dashboard</h2>
+    <div class="backend-login" id="backendLogin">
+      <h3>Password Required</h3>
+      <p>This area is restricted to RISE administrators.</p>
+      <div class="backend-pw-row">
+        <input type="password" id="adminPwInput" placeholder="Enter password" onkeydown="if(event.key==='Enter')checkAdminPw()">
+        <button class="backend-pw-btn" onclick="checkAdminPw()">Enter</button>
+      </div>
+      <div class="backend-pw-err" id="adminPwErr">Incorrect password. Please try again.</div>
+    </div>
+    <div class="backend-content" id="backendContent">
+      <div class="backend-header-row">
+        <div>
+          <div style="font-size:0.78rem;color:var(--muted);margin-bottom:4px">Student checkout records</div>
+        </div>
+        <div style="display:flex;gap:10px;">
+          <button class="btn-export" onclick="exportToCSV()">&#x2B07; Export to CSV</button>
+          <button class="btn-clear-data" onclick="clearAdminData()">&#x1F5D1; Clear All Data</button>
+        </div>
+      </div>
+      <div class="backend-stats" id="backendStats"></div>
+      <div class="backend-table-wrap">
+        <table class="backend-table" id="backendTable">
+          <thead><tr><th>#</th><th>Name</th><th>UTD Email</th><th>Date &amp; Time</th><th># Applied</th><th>Scholarships / Competitions</th></tr></thead>
+          <tbody id="backendTbody"></tbody>
+        </table>
+      </div>
+      <div style="font-size:0.74rem;color:var(--muted);margin-top:12px">Data is stored locally in this browser session. Export to CSV to save permanently.</div>
+    </div>
+  </div>
+</div>
+
+<script>
+// ── SECRET BACKEND ACCESS ─────────────────────────────────────
+// Type "riseadmin" anywhere on the page (not in an input) to reveal the Admin tab
+let _secretBuf = '';
+document.addEventListener('keydown', e => {
+  if (document.activeElement && (document.activeElement.tagName === 'INPUT' || document.activeElement.tagName === 'TEXTAREA')) return;
+  _secretBuf += e.key.toLowerCase();
+  if (_secretBuf.length > 12) _secretBuf = _secretBuf.slice(-12);
+  if (_secretBuf.includes('riseadmin')) {
+    document.getElementById('backendTab').style.display = '';
+    _secretBuf = '';
+  }
+});
+
+const ADMIN_PASSWORD = 'RISE2026';
+
+// ── SESSION TRACKING ──────────────────────────────────────────
+const sessionStart = Date.now();
+function getDeviceType(){
+  const ua=navigator.userAgent;
+  if(/iPad|Tablet/i.test(ua))return'Tablet';
+  if(/Mobi|Android|iPhone|iPod|BlackBerry|IEMobile|Opera Mini/i.test(ua))return'Mobile';
+  return'Desktop';
+}
+function getTimeSpent(){
+  const secs=Math.round((Date.now()-sessionStart)/1000);
+  const m=Math.floor(secs/60);
+  const s=secs%60;
+  return m>0?m+'m '+s+'s':s+'s';
+}
+const SHEETS_URL='https://script.google.com/macros/s/AKfycbzX_8FneV5ygzCE9GnZLzGhfBAEP2k3XTEEGOb60u5Jhc9KyrHDkkt-9SNODnCBMN0-/exec';
+
+function checkAdminPw() {
+  const val = document.getElementById('adminPwInput').value;
+  if (val === ADMIN_PASSWORD) {
+    document.getElementById('backendLogin').style.display = 'none';
+    document.getElementById('backendContent').classList.add('show');
+    renderBackend();
+  } else {
+    document.getElementById('adminPwErr').classList.add('show');
+    document.getElementById('adminPwInput').value = '';
+  }
+}
+
+// ── CHECKOUT LOG (in-memory + localStorage) ──────────────────
+let checkoutLog = [];
+try { checkoutLog = JSON.parse(localStorage.getItem('riseCheckoutLog') || '[]'); } catch(e) { checkoutLog = []; }
+function saveLog() { try { localStorage.setItem('riseCheckoutLog', JSON.stringify(checkoutLog)); } catch(e) {} }
+
+// ── DATABASE ─────────────────────────────────────────────────
+const DB = [
+
+  {id:42,cat:"Scholarship",name:"Orange Scholars Scholarship Program",org:"The Home Depot Homer Fund",background:"The Orange Scholars Program offers scholarships to associates and their children based on financial need and academic performance, as well as community involvement and leadership. Financial need is given the highest consideration.",awardRaw:"$2,500",award:2500.0,trip:false,semester:"Spring",opens:"2026-11-01",closes:"2027-01-20",projected:true,majors:"Any",years:"High School Admit,  Freshmen,  Sophomores,  Juniors",gpa:0.0,citizen:false,refs:true,essays:false,employee:true,contact:"orangescholars@applyists.com",link:"https://thdhomerfund.org/orangescholars/"},
+  {id:31,cat:"Scholarship",name:"KFC Foundation Scholarships",org:"KFC Foundation",background:"The KFC Foundation helps employees pursue their dreams of going to college by offering scholarships supporting KFC restaurant employees pursuing college or trade school degrees. GPA tiers may affect the amount awarded.",awardRaw:"$20,000",award:20000.0,trip:false,semester:"Spring",opens:"2026-01-05",closes:"2026-02-09",projected:false,majors:"Any",years:"High School Admit,  Freshmen,  Sophomores,  Juniors,  Seniors",gpa:2.5,citizen:true,refs:false,essays:true,employee:true,contact:"info@kfcfoundation.org",link:"https://www.scholarships.com/scholarships/kfc-foundation-scholarships"},
+  {id:75,cat:"Competition",name:"Out of the Box Competition",org:"Naveen Jindal School of Management",background:"JSOM is excited to bring this opportunity to students and open the door to future opportunities within the field of Supply Chain Management. The topic each year will vary. Last year's prompt was about improving efficiency and customer experience for a clothing retailer.",awardRaw:"$750",award:750.0,trip:false,semester:"Spring",opens:"2026-01-31",closes:"2026-03-30",projected:true,majors:"Any Business",years:"Freshmen,  Sophomores,  Juniors,  Seniors",gpa:0.0,citizen:false,refs:false,essays:true,employee:false,contact:"bsscm@utdallas.edu",link:"https://jindal.utdallas.edu/supply-chain-competition/"},
+  {id:79,cat:"Scholarship",name:"Paul S. Mills Scholarship",org:"NAIFA",background:"The Paul S. Mills Scholarship program offers scholarships to students pursuing a degree in a financial service related field. This may include finance, accounting, insurance or risk management, actuarial sciences, and personal financial planning. To apply you must complete an application and write a short essay (500 words) describing why you wish to pursue an education in the financial service field and why the scholarship is important to you. ",awardRaw:"$1,000",award:1000.0,trip:false,semester:"Spring",opens:"2026-02-01",closes:"2026-03-31",projected:false,majors:"Actuarial Science,  Accounting,  Finance",years:"Freshmen,  Sophomores,  Juniors,  Seniors,  Graduate",gpa:0.0,citizen:false,refs:false,essays:true,employee:false,contact:"info@naifa.org",link:"https://www.scholarships.com/scholarships/paul-s-mills-scholarship"},
+  {id:78,cat:"Scholarship",name:"AFWA Undergraduate Scholarship ",org:"AFWA",background:"The purpose of the scholarship is to support the costs of attending 3rd, 4th, or 5th year when pursuing an accounting or finance degree. Scholarship awards are presented to students who have completed their sophomore year of college (or 60 semester hours or the equivalent) by the time of the application deadline and are majoring in accounting or finance.  Scholarship candidates will be reviewed on leadership, character, communication skills, scholastic average and financial need. The number of recipients and the maximum dollar amounts will vary. ",awardRaw:"$500",award:500.0,trip:false,semester:"Spring",opens:"2026-01-23",closes:"2026-04-01",projected:false,majors:"Accounting,  Finance",years:"Juniors,  Seniors",gpa:3.0,citizen:false,refs:false,essays:true,employee:false,contact:"scholarship@foundationofafwa.org",link:"https://www.scholarships.com/scholarships/afwa-undergraduate-5-year-degree-scholarship"},
+  {id:91,cat:"Scholarship",name:"Culver\u2019s Foundation Scholarship",org:"Culver\u2019s Foundation",background:"Since 1993, the Culver\u2019s Foundation Scholarship has awarded over $8 million in scholarships to deserving employees based on their academic achievement and the differences they can make in their communities and careers.",awardRaw:"$10,000",award:10000.0,trip:false,semester:"Spring",opens:"2026-02-11",closes:"2026-04-01",projected:false,majors:"Any",years:"Any",gpa:2.0,citizen:false,refs:true,essays:true,employee:true,contact:"scholarships@culvers.com",link:"https://www.culvers.com/culvers-foundation-scholarship"},
+  {id:47,cat:"Scholarship",name:"GIVERSITY in STEM Scholarship",org:"GG STEM Foundation",background:"The GIVERSITY in STEM Scholarship aims to support high school seniors and undergraduate students pursuing a degree in a STEM-related field. A statement about your educational plans is required.",awardRaw:"$1,000",award:1000.0,trip:false,semester:"Spring",opens:"2026-01-01",closes:"2026-04-05",projected:false,majors:"Any STEM",years:"High School Admit,  Freshmen,  Sophomores,  Juniors,  Seniors",gpa:0.0,citizen:true,refs:false,essays:true,employee:false,contact:"ggstemfoundation@gmail.com",link:"www.ggstemfoundation.com/scholarships"},
+  {id:66,cat:"Scholarship",name:"Surety Bond Authority Scholarship",org:"Surety Bond Authority",background:"The Surety Bond Authority scholarship program is open to all high school and college students who are currently enrolled in or who are in pursuit of a degree in Accounting, Banking, Finance, or other business-related coursework.",awardRaw:"$1,500",award:1500.0,trip:false,semester:"Spring",opens:"2026-02-01",closes:"2026-04-06",projected:false,majors:"Any Business",years:"High School Admit,  Freshmen,  Sophomores,  Juniors,  Seniors",gpa:0.0,citizen:false,refs:false,essays:true,employee:false,contact:"suretyauthority@gmail.com",link:"https://suretybondauthority.com/surety-bond-authority-scholarship-2026/"},
+  {id:90,cat:"Scholarship",name:"Hungry for Education Scholarship",org:"Denny\u2019s Inc.",background:"Since 2011, Denny\u2019s has been preparing students for the future through the Hungry for Education\u2122 scholarship program. They have given away over $2.7 million in scholarships to support deserving students who are truly difference-makers in their communities.",awardRaw:"$1,000",award:1000.0,trip:false,semester:"Spring",opens:"2026-02-12",closes:"2026-04-12",projected:false,majors:"Any",years:"High School Admit,  Freshmen,  Sophomores,  Juniors,  Seniors,  Graduate",gpa:2.5,citizen:false,refs:false,essays:true,employee:false,contact:"info@ushli.org",link:"https://www.ushli.org/dennys-scholarship-application/"},
+  {id:44,cat:"Scholarship",name:"Kroger Scholars Program",org:"The Kroger Co. Foundation",background:"As an associate of Kroger, we value your commitment to hard work \u2013 for your family, our customers and the community we share. To thank you, The Kroger Co. Foundation is awarding scholarships to associates and their children who are students passionate about making a difference in the community.",awardRaw:"$2,500",award:2500.0,trip:false,semester:"Spring",opens:"2026-03-05",closes:"2026-04-16",projected:false,majors:"Any",years:"High School Admit,  Freshmen,  Sophomores,  Juniors,  Seniors",gpa:0.0,citizen:false,refs:false,essays:true,employee:true,contact:"KrogerScholars@applyISTS.com",link:"https://programs.applyists.com/krogerscholars/"},
+  {id:7,cat:"Scholarship",name:"Sttark You Can\u2019t Label People, But You Can Label Products",org:"Sttark",background:"The Sttark scholarship is a great opportunity for creative students who want to combine their writing and design talents to reflect on the impact of labels in our society. This scholarship encourages students to reflect on how labels impact creativity and perception while showcasing their artistic and writing skills.",awardRaw:"$3,000",award:3000.0,trip:false,semester:"Spring",opens:"2026-01-01",closes:"2026-04-30",projected:false,majors:"Any",years:"Any",gpa:0.0,citizen:true,refs:false,essays:true,employee:false,contact:"scholarship@sttark.com",link:"https://www.scholarships.com/scholarships/you-cant-label-people-but-you-can-label-products"},
+  {id:26,cat:"Scholarship",name:"NGA Foundation Scholarship",org:"National Grocers Association",background:"The NGA Foundation seeks to position the independent grocery industry as an employer of choice for college students and is committed to supporting students planning careers with this industry. Since 1990 NGA and its affiliates have awarded over $1 million in scholarships providing the critical resources needed to invest in our future leaders. ",awardRaw:"$1,500",award:1500.0,trip:false,semester:"Spring",opens:"2026-01-15",closes:"2026-04-30",projected:false,majors:"Any Business,  Information Systems + CIS Tech",years:"Freshmen,  Sophomores,  Juniors,  Seniors,  Graduate",gpa:2.5,citizen:false,refs:true,essays:true,employee:false,contact:"nga-foundation@nationalgrocers.org",link:"https://www.nationalgrocers.org/foundation/students/scholarships/"},
+  {id:80,cat:"Scholarship",name:"oxyGEN with AT&T National Scholarship",org:"AT&T",background:"This scholarship recognizes student\u2019s ability to demonstrate critical and creative thinking by effectively communicating the importance of a Science, Technology, Engineering, Art and Mathematics (STEAM) topic and their ability to make an impact in the field or community.",awardRaw:"$1,000",award:1000.0,trip:false,semester:"Spring",opens:"2026-02-01",closes:"2026-04-30",projected:false,majors:"Any",years:"High School Admit,  Freshmen,  Sophomores,  Juniors,  Seniors",gpa:0.0,citizen:true,refs:false,essays:true,employee:false,contact:"oxygenscholarship@att.com",link:"https://www.scholarships.com/scholarships/oxygen-with-atandt-national-scholarship"},
+  {id:99,cat:"Scholarship",name:"Shape the Future of Freight Scholarship",org:"Foreigh",background:"The Shape the Future of Freight Scholarship is  for students passionate about transforming the transportation, supply chain, and logistics industry. The scholarship encourages innovative thinking about how technology can create the most efficient freight brokerage possible. This is an exciting opportunity for students to share their creative vision and make a meaningful impact in the industry.",awardRaw:"$1,000",award:1000.0,trip:false,semester:"Spring",opens:"2026-01-01",closes:"2026-04-30",projected:true,majors:"Supply Chain Management",years:"Any",gpa:3.0,citizen:false,refs:false,essays:true,employee:false,contact:"scholarship@foreigh.com",link:"foreigh.com/scholarship"},
+  {id:32,cat:"Scholarship",name:"Garcia Family Scholarship",org:"American Floral Endowment",background:"The Garcia Family Scholarship is intended for students attending a four year institution with a career focus on the marketing or distribution of floral products, including retail, wholesale, manufacturing and/or floral business ownership/operations.",awardRaw:"$5,000",award:5000.0,trip:false,semester:"Spring",opens:"2026-03-12",closes:"2026-05-01",projected:false,majors:"Any",years:"Juniors,  Seniors",gpa:2.0,citizen:true,refs:true,essays:true,employee:false,contact:"afe@endowment.org",link:"https://www.scholarships.com/scholarships/garcia-family-scholarship"},
+  {id:45,cat:"Scholarship",name:"National Society of Accountants Foundation Scholarship",org:"NSA Foundation",background:"The Foundation awards scholarships to undergraduate and graduate students enrolled in degree programs at accredited two & four-year colleges or universities. Scholarships are awarded based on scholastic achievement, demonstrated leadership ability, and financial need.",awardRaw:"$2,500",award:2500.0,trip:false,semester:"Spring",opens:"2026-01-15",closes:"2026-05-01",projected:false,majors:"Accounting",years:"Freshmen,  Sophomores,  Juniors,  Seniors,  Graduate",gpa:3.0,citizen:true,refs:false,essays:true,employee:false,contact:"members@nsacct.org",link:"https://www.scholarships.com/scholarships/national-society-of-accountants-foundation-scholarship"},
+  {id:49,cat:"Scholarship",name:"PMI GAC Scholarship",org:"Project Management Institute",background:"GAC scholarships are open to all students enrolled in GAC-accredited, academic, degree granting programs, in project/program/portfolio management or a project management related field of study. The purpose of the GAC scholarship is to support students who are studying project management, with the objective of using project/program/portfolio management to meet the current and anticipated needs of an organization.",awardRaw:"$3,000",award:3000.0,trip:false,semester:"Spring",opens:"2026-03-20",closes:"2026-05-10",projected:false,majors:"Any Business",years:"Any",gpa:0.0,citizen:false,refs:true,essays:true,employee:false,contact:"pmief@pmi.org",link:"https://www.scholarships.com/scholarships/pmi-gac-scholarships"},
+  {id:50,cat:"Scholarship",name:"PMI Dr. Harold Kerzner Scholarship",org:"Project Management Institute",background:"This is named in honor of Harold Kerzner, a globally recognized expert on project, program, and portfolio management, innovation and strategic planning, and Senior Executive Director at International Institute for Learning. This scholarship is meant to emphasize the strategic role of project management as a competitive advantage.",awardRaw:"$7,500",award:7500.0,trip:false,semester:"Spring",opens:"2026-03-01",closes:"2026-05-10",projected:false,majors:"Any Business",years:"Freshmen,  Sophomores,  Juniors,  Seniors,  Graduate",gpa:0.0,citizen:false,refs:true,essays:true,employee:false,contact:"pmief@pmi.org",link:"www.pmi.org/learning/academic-programs/academic-scholarships"},
+  {id:35,cat:"Scholarship",name:"CVS Health Foundation Health Care Careers Scholarship",org:"CVS Health Foundation / UNCF",background:"CVS has created a scholarship for college students pursuing healthcare careers (including business majors pursuing healthcare careers) funded by its CVS Health Foundation that supported nearly 100 students and awarded more than $1.2 million in pharmacy, nursing and retail management focused scholarships and supports in 2025 alone.",awardRaw:"$10,000",award:10000.0,trip:false,semester:"Spring",opens:"2026-03-27",closes:"2026-05-15",projected:false,majors:"Information Systems + CIS Tech,  Data Science",years:"Sophomores",gpa:3.0,citizen:true,refs:true,essays:true,employee:false,contact:"",link:"https://bigfuture.collegeboard.org/scholarships/cvs-health-foundation-health-care-careers-scholarship"},
+  {id:92,cat:"Scholarship",name:"NACS Foundation Future Fund Scholarship",org:"National Association of Convenience Stores",background:"For more than 30 years, the NACS Foundation has provided scholarships to employees of their retail member companies and their children to fuel the next generation of industry leaders from within our member companies. ",awardRaw:"$3,000",award:3000.0,trip:false,semester:"Spring",opens:"2026-03-01",closes:"2026-05-15",projected:false,majors:"Any",years:"High School Admit,  Freshmen,  Sophomores,  Juniors,  Seniors",gpa:0.0,citizen:false,refs:true,essays:true,employee:true,contact:"info@conveniencecares.org",link:"https://www.conveniencecares.org/our-programs/future-fund/scholarship"},
+  {id:56,cat:"Scholarship",name:"KMF Foundation Professional Excellence Scholarship",org:"Kohlberg-Manacher Foundation",background:"The KMF Professional Excellence Scholarship Program offers up to $12,000 over two years to support driven college juniors and seniors pursuing careers in business, computer science, artificial intelligence, or data science.",awardRaw:"$12,000",award:12000.0,trip:false,semester:"Spring",opens:"2026-04-06",closes:"2026-05-16",projected:false,majors:"Any Business,  Data Science,  Computer Science",years:"Juniors,  Seniors",gpa:3.4,citizen:true,refs:false,essays:false,employee:false,contact:"ivini@kohlberg-manacherfoundation.com",link:"https://www.scholarships.com/scholarships/kmf-foundation-professional-excellence-scholarship"},
+  {id:1,cat:"Scholarship",name:"NRF Foundation Next Generation Scholarship",org:"NRF Foundation",background:"The 2026 NRF Foundation Next Generation Scholarship application consists of two phases. In the first phase, applicants will submit an essay, personal brand video, one letter of recommendation, resume, headshot and school transcripts. From there, ten students will advance and complete quick-fire video interviews with the NRF team. The top five finalists will then be selected and notified by October 6, 2026. The finalists will complete final round interviews with members of the NRF Foundation Board of Directors to determine the top recipient.",awardRaw:"$25,000",award:25000.0,trip:false,semester:"Spring",opens:"2026-01-01",closes:"2026-05-26",projected:false,majors:"Any",years:"Juniors,  Seniors",gpa:3.0,citizen:true,refs:true,essays:true,employee:false,contact:"scholarships@nrf.com",link:"https://nrffoundation.org/campus/scholarships/next-generation/how-to-apply"},
+  {id:58,cat:"Scholarship",name:"TELACU College Success Program",org:"TELACU Education Foundation",background:"Because TELACU believes that the future leaders of our community must be engaged in meaningful careers that will change the face of our world, our TELACU Scholar cohort in large part consists of young people majoring in the fields of STEM and  Business. These fields of study are where our Scholars are able to most immediately find employment upon graduation and embark on long-lasting, high-impact careers.",awardRaw:"$5,000",award:5000.0,trip:false,semester:"Spring",opens:"2026-08-01",closes:"2026-05-31",projected:false,majors:"Any Business,  Any STEM",years:"Any",gpa:2.5,citizen:false,refs:false,essays:true,employee:false,contact:"collegesuccess@telacu.com",link:"https://docs.google.com/forms/d/e/1FAIpQLSdb3H1_hA23xFVZ2YACs9_eGdh41RcaedFC4phA8iPytvb5Pg/viewform"},
+  {id:82,cat:"Scholarship",name:"Project STEM Heroes Scholarship",org:"DoSomething",background:"DoSomething + 3M are celebrating the premiere of Project Hail Mary by helping inspire younger students to build STEM skills for the good of our planet. Record a 60 second message to younger students sharing your passion and excitement for STEM, encouraging the nextgen to build their STEM skills for the future.",awardRaw:"$1,500",award:1500.0,trip:false,semester:"Spring",opens:"2026-02-27",closes:"2026-05-31",projected:false,majors:"Any",years:"Any",gpa:0.0,citizen:false,refs:false,essays:true,employee:false,contact:"",link:"https://dosomething.org/program/project-stem-heroes"},
+  {id:54,cat:"Scholarship",name:"TLMI Academic & Vocational Scholarship",org:"Tag and Label Manufacturers Institute",background:"This scholarship is for students interested in a career in the tag, label, packaging, and printing industry. This scholarship supports students enrolled in programs that are relevant to the industry and encourages future leaders in areas such as management, sales, marketing, production, and graphic communications.",awardRaw:"$5,000",award:5000.0,trip:false,semester:"Spring",opens:"2026-02-06",closes:"2026-06-05",projected:false,majors:"Any Business",years:"Freshmen,  Sophomores,  Juniors,  Seniors",gpa:3.0,citizen:false,refs:true,essays:true,employee:false,contact:"office@tlmi.com",link:"tlmi.com/awards-scholarships/educational-and-training-benefits/"},
+  {id:68,cat:"Scholarship",name:"Ryan J. Gibbs Business Scholarship",org:"Ryan J. Gibbs Foundation",background:"The Ryan J. Gibbs Business Scholarship will be awarded annually to one student in their second, third or fourth year of undergraduate school. The scholarship requires an essay on a business-related topic that is changed to reflect current developments in business each awarding year.",awardRaw:"$1,000",award:1000.0,trip:false,semester:"Spring",opens:"2026-01-01",closes:"2026-06-07",projected:false,majors:"Any Business",years:"Sophomores,  Juniors,  Seniors",gpa:0.0,citizen:false,refs:false,essays:true,employee:false,contact:"ryan@thegibbsfirm.com",link:"https://www.ryanjgibbs.org/scholarship"},
+  {id:55,cat:"Scholarship",name:"Future Green Leaders Scholarship",org:"wiseGEEK",background:"The Future Green Leaders Scholarship supports students who are committed to creating a more sustainable world through business innovation, scientific research, or community-driven action. To apply, write an essay about why sustainability should be a priority in your field.",awardRaw:"$1,000",award:1000.0,trip:false,semester:"Spring",opens:"2026-01-01",closes:"2026-06-17",projected:false,majors:"Any Business",years:"Any",gpa:0.0,citizen:true,refs:false,essays:true,employee:false,contact:"contact@bold.org",link:"https://bold.org/scholarships/future-green-leaders-scholarship/"},
+  {id:14,cat:"Scholarship",name:"FSA Scholarship",org:"Food Sales Association Scholarship Foundation",background:"HEB is encouraging any of its employees or their dependents to apply for the FSA Scholarship to help them pursue an education. This program was created in 1999 to recognize the potential of education in shaping the retail food industry.",awardRaw:"$2,500",award:2500.0,trip:false,semester:"Spring",opens:"2026-01-12",closes:"2026-06-30",projected:false,majors:"Any",years:"High School Admit,  Freshmen,  Sophomores,  Juniors,  Seniors",gpa:0.0,citizen:true,refs:true,essays:true,employee:true,contact:"lisa@fsascholarshipfoundation.org",link:"https://www.fsascholarshipfoundation.org/"},
+  {id:62,cat:"Scholarship",name:"ULSCA Supply Chain Scholarship",org:"University Logistics and Supply Chain Association",background:"Founded in the mid-70s, ULSCA has flourished into a thriving community comprising members from over 30 esteemed Universities and Colleges. Our mission revolves around enhancing supply chain operations in higher education while nurturing the next generation of Supply Chain professionals.",awardRaw:"$1,500",award:1500.0,trip:false,semester:"Spring",opens:"2026-05-01",closes:"2026-06-30",projected:false,majors:"Supply Chain Management",years:"Freshmen,  Sophomores,  Juniors,  Seniors",gpa:2.5,citizen:false,refs:true,essays:true,employee:false,contact:"scholarship@ulsca.org",link:"ulsca.org/scholarship"},
+  {id:69,cat:"Scholarship",name:"Crystal Group Innovation Scholarship",org:"Crystal Rugged",background:"The Innovation Scholarship, sponsored by Crystal Group, was founded in 2014 as a way to celebrate and encourage the spirit of innovation. At Crystal Group, we embrace innovation in all aspects of our business, including our rugged computing product line, our approach to sales, marketing, engineering, and our business culture.",awardRaw:"$1,000",award:1000.0,trip:false,semester:"Spring",opens:"2026-02-07",closes:"2026-07-14",projected:false,majors:"Any Business,  Any Engineering/Technology",years:"Juniors,  Seniors",gpa:3.0,citizen:false,refs:true,essays:true,employee:false,contact:"Jessica.joyce@crystalrugged.com",link:"https://engr.psu.edu/academics/scholarship-details.aspx?ScholarshipID=723"},
+  {id:84,cat:"Scholarship",name:"Generation Google Scholarship",org:"Google",background:"The Generation Google Scholarship supports aspiring students pursuing degrees in computer science, helping them excel in technology and become future leaders in the field. Selected students be awarded based on their commitment to diversity, equity, and inclusion, demonstrated leadership, and academic performance.",awardRaw:"$10,000",award:10000.0,trip:false,semester:"Fall",opens:"2026-07-01",closes:"2026-08-14",projected:false,majors:"Any Engineering/Technology,  Information Systems + CIS Tech",years:"High School Admit,  Freshmen,  Sophomores,  Juniors,  Seniors",gpa:0.0,citizen:false,refs:false,essays:true,employee:false,contact:"generationgoogle-na@iie.org",link:"https://www.scholarships.com/scholarships/generation-google-scholarship"},
+  {id:59,cat:"Scholarship",name:"Marketing/Public Relations Scholarship",org:"DigitalWise",background:"The DigitalWise Media College Scholarship is designed to help PR students or prospective marketing students pay for their college tuition and further their education. This scholarship will go to deserving students who display a strong passion for their fields and is awarded twice a year.",awardRaw:"$1,000",award:1000.0,trip:false,semester:"Year-Round",opens:"2026-05-01",closes:"2026-08-15",projected:false,majors:"Marketing,  Design",years:"Freshmen,  Sophomores,  Juniors,  Seniors",gpa:3.0,citizen:false,refs:false,essays:true,employee:false,contact:"scholarship@digitalwisemedia.com\u00a0",link:"https://digitalwisemedia.com/scholarship/"},
+  {id:28,cat:"Scholarship",name:"Wikibuy eCommerce and Online Retail Scholarship",org:"Wikibuy",background:"Applicants must submit a 500-word essay on the prompt found on the website highlighting their entrepreneurial and innovative spirit. Special consideration given to those seeking a career in online retail and eCommerce.",awardRaw:"$2,500",award:2500.0,trip:false,semester:"Fall",opens:"2026-07-01",closes:"2026-08-21",projected:true,majors:"Any Business",years:"Freshmen,  Sophomores,  Juniors,  Seniors,  Graduate",gpa:3.4,citizen:false,refs:false,essays:true,employee:false,contact:"scholarshipsubmissions@wikibuy.com",link:"https://www.campusreel.org/scholarship/wikibuy-ecommerce-and-online-retail-scholarship"},
+  {id:51,cat:"Scholarship",name:"Rapid Formations Entrepreneur Scholarship",org:"Rapid Formations",background:"The Entrepreneur Scholarship Program is open to students to assist with the financial costs of studying, through which the acquisition and development of skills will potentially culminate in a successful enterprise. An essay about an entrepreneurial idea is required.",awardRaw:"$700",award:700.0,trip:false,semester:"Fall",opens:"2026-07-01",closes:"2026-08-31",projected:false,majors:"Any",years:"Any",gpa:0.0,citizen:false,refs:true,essays:true,employee:false,contact:"funding@rapidformations.co.uk",link:"https://www.rapidformations.co.uk/entrepreneur-scholarship-programme/"},
+  {id:29,cat:"Scholarship",name:"VMSD Scholarship + Experience",org:"VMSD Magazine",background:"The PAVE Scholarship Program, now in its fifteenth year, provides financial assistance to students in educational programs preparing them for careers in the retail environments industry, including but not limited to careers in retail design, visual merchandising, interior design, architecture, product design, UX design, graphic design, and industrial design. ",awardRaw:"$3,000",award:3000.0,trip:false,semester:"Fall",opens:"2026-07-11",closes:"2026-09-05",projected:true,majors:"Architecture,  Design,  Engineering",years:"Juniors,  Seniors,  Graduate",gpa:3.0,citizen:false,refs:true,essays:true,employee:false,contact:"info@paveglobal.org",link:"https://www.paveglobal.org/vmsd?utm_"},
+  {id:36,cat:"Scholarship",name:"Pizza Hut Foundation Scholarship Program",org:"Pizza Hut Foundation",background:"The Pizza Hut Foundation is awarding students  who exhibit leadership in their communities. This is not an employee-exclusive scholarship and winners will receive a mentorship program as well as possible continued performance. Financial need will be considered.",awardRaw:"$5,000",award:5000.0,trip:false,semester:"Fall",opens:"2026-07-08",closes:"2026-09-05",projected:true,majors:"Any",years:"Any",gpa:2.5,citizen:true,refs:true,essays:true,employee:false,contact:"info@pizzahutfoundation.org",link:"https://www.scholarships.com/scholarships/pizza-hut-scholarship-program"},
+  {id:60,cat:"Scholarship",name:"10X Digital Scholarship",org:"10X Digital",background:"10x digital believes in nurturing and cultivating the current and future generations of digital marketers. Are you a high school senior or undergraduate who is looking to offset the cost of your business, tech, marketing or communications degree? Apply for the 10X digital marketing scholarship.",awardRaw:"$4,000",award:4000.0,trip:false,semester:"Fall",opens:"2026-06-01",closes:"2026-09-10",projected:true,majors:"Any Business,  Any Engineering/Technology",years:"High School Admit,  Freshmen,  Sophomores,  Juniors,  Seniors",gpa:0.0,citizen:false,refs:false,essays:true,employee:false,contact:"scholarships.10x@gmail.com",link:"10xdigitalinc.com/scholarship/"},
+  {id:19,cat:"Competition",name:"NRF Foundation University Challenge",org:"NRF Foundation",background:"The NRF Foundation University Challenge isn\u2019t an average business case competition. This unique experience gives undergraduate students the chance to apply what they\u2019ve learned in the classroom in a real-world setting. A handful of teams will earn the chance to present their pitch to leaders from retail\u2019s biggest companies. Students must be referred by their school's NRF advisor.",awardRaw:"$30,000",award:30000.0,trip:false,semester:"Year-Round",opens:"2026-01-01",closes:"2026-09-22",projected:false,majors:"Any",years:"Freshmen,  Sophomores,  Juniors,  Seniors",gpa:0.0,citizen:true,refs:true,essays:true,employee:false,contact:"scholarships@nrf.com",link:"https://nrffoundation.org/campus/scholarships/university-challenge"},
+  {id:61,cat:"Scholarship",name:"Triadex Services Scholarship Program",org:"Triadex Services",background:"The Triadex Services Scholarship Program is an achievement-based scholarship awarded to graduating high school seniors and/or current college students each year. Students are recognized for their dedication to learning marketing and business methodologies, their capacity to lead and serve, and their commitment to making a significant impact on their schools and communities. Preference given to first-generation students but this is not required.",awardRaw:"$750",award:750.0,trip:false,semester:"Year-Round",opens:"2026-06-30",closes:"2026-09-30",projected:false,majors:"Any Business,  Any Engineering/Technology",years:"High School Admit,  Freshmen,  Sophomores,  Juniors,  Seniors",gpa:3.3,citizen:true,refs:false,essays:false,employee:false,contact:"info2@triadexservices.com",link:"www.triadexservices.com/triadex-scholarship/"},
+  {id:88,cat:"Scholarship",name:"Stantec Future Leaders Scholarship",org:"Stantec",background:"The Stantec Future Leaders Scholarship is designed to support the next generation of changemakers - students who are committed to making a difference in their industries and communities. Applicants should demonstrate leadership potential and show resilience and commitment to creating a positive impact in their industry or community.",awardRaw:"$10,000",award:10000.0,trip:false,semester:"Fall",opens:"2026-09-02",closes:"2026-10-15",projected:true,majors:"Any STEM",years:"High School Admit,  Freshmen,  Sophomores,  Juniors,  Seniors",gpa:0.0,citizen:false,refs:false,essays:true,employee:false,contact:"contactus@applyists.com",link:"https://www.stantec.com/en/about/community-engagement/stantec-future-leaders-scholarship"},
+  {id:25,cat:"Scholarship",name:"FSF Case Study Scholarship",org:"Fashion Scholarship Fund",background:"The Fashion Scholarship Fund supports the careers of the country\u2019s most promising fashion students from all backgrounds. It awards over $1.2 million each year to help students succeed in all sectors of the industry: design, merchandising, analytics, marketing and supply chain, among others. The annual FSF Case Study Scholarship is our signature program. No matter what sector of the industry you\u2019re interested in, we have a challenge for you.",awardRaw:"$10,000",award:10000.0,trip:false,semester:"Year-Round",opens:"2026-03-01",closes:"2026-10-16",projected:false,majors:"Any",years:"Sophomores,  Juniors,  Seniors",gpa:0.0,citizen:false,refs:false,essays:true,employee:false,contact:"MColletta@fashionscholarshipfund.org",link:"https://www.fashionscholarshipfund.org/fsf-case-study-scholarship"},
+  {id:39,cat:"Scholarship",name:"Remarkable Futures Scholarship",org:"Chick-fil-A, Inc.",background:"Chick-fil-A restaurant Team Members are eligible for two scholarships through the Chick-fil-A Remarkable Futures\u2122 Scholarships initiative. Every year Team Members are encouraged to apply for scholarships through the Remarkable Futures Scholarship program. Over 14,000 recipients received scholarships in 2024. Leadership and involvement will be factored into consideration.",awardRaw:"$2,500",award:2500.0,trip:false,semester:"Fall",opens:"2026-08-19",closes:"2026-10-21",projected:true,majors:"Any",years:"Any",gpa:2.5,citizen:false,refs:false,essays:true,employee:true,contact:"remarkablefutures@chick-fil-a.com",link:"https://www.unigo.com/scholarships/company-sponsored/food-and-beverage-company-sponsored-scholarships/leadership-scholarship"},
+  {id:97,cat:"Scholarship",name:"Inspired by Design: PAVE Student Visionary Award ",org:"PAVE Global",background:"This annual award honors rising student visionaries who demonstrate creativity and innovation in consumer environment design. Applicant must submit design work addressing human consumer-centered design themes.",awardRaw:"$7,500",award:7500.0,trip:false,semester:"Fall",opens:"2026-09-17",closes:"2026-10-26",projected:false,majors:"Design, Architecture",years:"Freshmen,  Sophomores,  Juniors,  Seniors,  Graduate",gpa:0.0,citizen:false,refs:false,essays:true,employee:false,contact:"info@paveglobal.org",link:"https://www.scholarships.com/scholarships/inspired-by-design-pave-student-visionary-award"},
+  {id:89,cat:"Scholarship",name:"NextGen Scholarship",org:"CPCU Society",background:"The CPCU Society NextGen Scholarship Fund was created to promote higher educational opportunities for students interested in careers within the risk management and insurance industry.",awardRaw:"$5,000",award:5000.0,trip:false,semester:"Fall",opens:"2026-05-01",closes:"2026-10-27",projected:true,majors:"Any Business,  Information Systems + CIS Tech",years:"Freshmen,  Sophomores,  Juniors,  Seniors",gpa:3.0,citizen:false,refs:true,essays:true,employee:false,contact:"memberresources@theinstitutes.org",link:"www.cpcusociety.org/Public/Education/NextGen.aspx"},
+  {id:30,cat:"Scholarship",name:"Chick-fil-A Community Scholars Program",org:"Chick-fil-A, Inc.",background:"Through the Chick-fil-A\u2122 Community Scholars program, Chick-fil-A, Inc. helps pay for the education of leaders in our communities who want to continue learning, while also investing in their leadership development. The Chick-fil-A Community Scholars will participate in a one-year engagement program that includes mentoring and leadership development opportunities.",awardRaw:"$25,000",award:25000.0,trip:false,semester:"Fall",opens:"2026-08-19",closes:"2026-10-28",projected:true,majors:"Any",years:"Any",gpa:0.0,citizen:true,refs:true,essays:true,employee:false,contact:"communityscholars@chick-fil-a.com ",link:"https://scholarshipamerica.org/scholarship/chick-fil-a-community-scholars/"},
+  {id:57,cat:"Scholarship",name:"Red Egg Marketing Scholarship",org:"Red Egg Marketing",background:"At Red Egg, we believe that higher education is a key part of a successful career. Unfortunately, the high costs of pursuing a degree often prevent many students from continuing their education. To help reduce the financial burden, we have created the Red Egg Marketing Scholarship, available to anyone pursuing a career in a creative or marketing-related field.",awardRaw:"$2,500",award:2500.0,trip:false,semester:"Fall",opens:"2026-05-01",closes:"2026-10-31",projected:false,majors:"Marketing,  Design",years:"Any",gpa:0.0,citizen:false,refs:false,essays:true,employee:false,contact:"hello@redeggmarketing.com",link:"https://redeggmarketing.com/about/scholarship/"},
+  {id:17,cat:"Competition",name:"Global Student Competition",org:"PCMA",background:"The PCMA Global Student Competition invites student teams from around the world to solve real-world challenges in the business events industry. Each year, participants develop creative, strategic proposals in response to a timely case study, then pitch their ideas to a panel of industry leaders. It\u2019s a one-of-a-kind opportunity to showcase your talent, build your network, and make your mark on the future of events. Teams must have 3-5 undergraduate students.",awardRaw:"$500",award:500.0,trip:false,semester:"Fall",opens:"2026-08-01",closes:"2026-11-02",projected:false,majors:"Any Business",years:"Freshmen,  Sophomores,  Juniors,  Seniors,  Graduate",gpa:0.0,citizen:false,refs:false,essays:true,employee:false,contact:"foundation@pcma.org",link:"https://www.pcma.org/chapters/student-chapters/student-competition/"},
+  {id:2,cat:"Scholarship",name:"NRF Foundation Bright Futures Scholarship",org:"NRF Foundation",background:"The NRF Foundation Student Program offers students the chance to explore exciting career paths in the retail industry and accelerate their careers. Students will have the opportunity to meet with and learn more about having a career at within the retail industry, including meeting with some of the most exciting brands in the country who are driving innovation.",awardRaw:"NRF Student Program Trip to NYC",award:0,trip:true,semester:"Fall",opens:"2026-08-25",closes:"2026-11-03",projected:true,majors:"Any",years:"Sophomores,  Juniors,  Seniors",gpa:2.5,citizen:true,refs:true,essays:true,employee:false,contact:"scholarships@nrf.com",link:"https://nrffoundation.org/campus/scholarships/bright-futures"},
+  {id:3,cat:"Scholarship",name:"NRF Foundation Rising Stars Scholarship",org:"NRF Foundation",background:"The Rising Stars Scholarship was created to teach younger students about the variety of career opportunities available in the retail industry, and to encourage them to attend the NRF Foundation Student Program early in their academic careers. Each University Member can nominate one student for the Rising Stars Scholarship.",awardRaw:"NRF Student Program Trip to NYC",award:0,trip:true,semester:"Fall",opens:"2026-08-25",closes:"2026-11-03",projected:true,majors:"Any",years:"Freshmen,  Sophomores",gpa:0.0,citizen:true,refs:true,essays:true,employee:false,contact:"scholarships@nrf.com",link:"https://nrffoundation.org/campus/scholarships/rising-stars"},
+  {id:4,cat:"Scholarship",name:"NRF Foundation Ray Greenly Scholarship",org:"NRF Foundation",background:"The Ray Greenly Scholarship Fund awards students across the country who have the creativity, entrepreneurial spirit and forward-thinking to create new ways to connect retail customers to brands and products. Recipients are ambitious, curious, adaptable and have the potential to impact the future of digital retail.",awardRaw:"NRF Student Program Trip to NYC",award:0,trip:true,semester:"Fall",opens:"2026-09-01",closes:"2026-11-03",projected:true,majors:"Information Systems + CIS Tech,  Supply Chain Management",years:"Sophomores,  Juniors,  Seniors",gpa:3.0,citizen:true,refs:true,essays:false,employee:false,contact:"scholarships@nrf.com",link:"https://nrffoundation.org/campus/scholarships/ray-greenly"},
+  {id:87,cat:"Competition",name:"Modeling the Future Challenge",org:"The Actuarial Foundation",background:"The Modeling the Future Challenge is a real-world competition for high school students combining math-modeling, data-analysis, and risk-management into one exciting challenge! To compete, students conduct their own research project modeling real-world data to analyze risks and make recommendations to companies, industry groups, governments, or organizations.",awardRaw:"$60,000",award:60000.0,trip:false,semester:"Fall",opens:"2026-08-25",closes:"2026-11-09",projected:true,majors:"Any",years:"High School Admit",gpa:0.0,citizen:false,refs:false,essays:true,employee:false,contact:"challenge@mtfchallenge.org",link:"https://www.mtfchallenge.org/"},
+  {id:53,cat:"Scholarship",name:"ParkON Scholarship",org:"ParkON",background:"As a successful online business, ParkON recognizes that colleges and universities are hubs for new ideas and business innovation. Since 2018, we have proudly awarded private scholarships each year to two creative and driven college students who demonstrate exceptional potential based on a real world essay application of their studies. This year, applicants must provide input on the impact of parking on traveling consumer behavior.",awardRaw:"$1,000",award:1000.0,trip:false,semester:"Fall",opens:"2026-08-01",closes:"2026-11-15",projected:false,majors:"Any Business",years:"Freshmen,  Sophomores,  Juniors,  Seniors,  Graduate",gpa:3.0,citizen:false,refs:false,essays:true,employee:false,contact:"",link:"https://www.parkon.com/info/scholarship"},
+  {id:77,cat:"Competition",name:"Marketing Research Competition",org:"Quirk's Media",background:"Students in teams of 2-4 will have one semester to collect and analyze primary data (students determine the method) related to a national brand\u2019s RFP. Student teams will produce a 20-slide presentation and submit it to the competition. Finally, the client and a panel of judges from the market research industry will identify the top three grad and undergrad teams. ",awardRaw:"$2,000",award:2000.0,trip:false,semester:"Fall",opens:"2026-10-31",closes:"2026-11-23",projected:true,majors:"Marketing",years:"Freshmen,  Sophomores,  Juniors,  Seniors,  Graduate",gpa:0.0,citizen:false,refs:false,essays:true,employee:false,contact:"info@marketingresearchcompetition.com",link:"https://marketingresearchcompetition.com/aboutcompetition"},
+  {id:70,cat:"Scholarship",name:"Doc Cohen Franchising Scholarship",org:"IFA Educational Foundation",background:"The Doc Cohen Franchising Scholarship will support the award of a scholarship and a travel stipend to attend the IFA Annual Convention. Scholarship candidates must be U.S. citizens enrolled in an accredited U.S. college or university, with a major or primary focus in one or more of these areas of study - business, finance, marketing, food service, hospitality, franchising, or entrepreneurship. Applicants must also submit a business plan up to 10 pages on a business concept with their scholarship application. ",awardRaw:"$5,000",award:5000.0,trip:false,semester:"Fall",opens:"2026-09-01",closes:"2026-11-24",projected:true,majors:"Any Business",years:"Freshmen,  Sophomores,  Juniors,  Seniors,  Graduate",gpa:0.0,citizen:true,refs:false,essays:true,employee:false,contact:"info@franchise.org",link:"https://www.scholarships.com/scholarships/doc-cohen-franchising-scholarship"},
+  {id:71,cat:"Scholarship",name:"Fred DeLuca Foundation Scholarship",org:"IFA Educational Foundation",background:"Created in memory of the co-founder of Subway, the IFA Foundation Scholarship Sponsored by The Frederick A. DeLuca Foundation recognizes and supports outstanding students interested in franchising who are enrolled in an accredited college/university with studies in business.",awardRaw:"$4,000",award:4000.0,trip:false,semester:"Fall",opens:"2026-09-01",closes:"2026-11-24",projected:true,majors:"Any Business",years:"Freshmen,  Sophomores,  Juniors,  Seniors,  Graduate",gpa:0.0,citizen:true,refs:false,essays:true,employee:false,contact:"info@franchise.org",link:"https://www.scholarships.com/scholarships/fred-deluca-foundation-scholarship"},
+  {id:95,cat:"Scholarship",name:"Future of Connectivity Essay Scholarship",org:"Zipit Wireless",background:"Zipit Wireless is excited to announce the Future of Connectivity Scholarship, offering an award to a  student who envisions the impact of Internet-enabled devices on people's lives and industries. If you are a student passionate about the future of connectivity and have innovative ideas, we invite you to share your vision. ",awardRaw:"$2,500",award:2500.0,trip:false,semester:"Fall",opens:"2026-10-01",closes:"2026-11-25",projected:true,majors:"Any Business,  Any Engineering/Technology,  Data Science,  Information Systems + CIS Tech",years:"Freshmen,  Sophomores,  Juniors,  Seniors,  Graduate",gpa:0.0,citizen:false,refs:false,essays:true,employee:false,contact:"",link:"https://www.zipitwireless.com/scholarship"},
+  {id:65,cat:"Scholarship",name:"John Galt Scholarship for Future Supply Chain Leaders",org:"John Galt Solutions",background:"This opportunity is designed to support passionate and financially deserving students who are committed to entering the supply chain profession. The John Galt Solutions Scholarship is open to passionate and dedicated students pursuing degrees in supply chain management, business forecasting, or related programs.",awardRaw:"$10,000",award:10000.0,trip:false,semester:"Fall",opens:"2026-03-16",closes:"2026-11-30",projected:true,majors:"Supply Chain Management,  Business Analytics",years:"Freshmen,  Sophomores,  Juniors,  Seniors",gpa:0.0,citizen:false,refs:false,essays:true,employee:false,contact:"connect@johngalt.com",link:"johngalt.com/scholarships"},
+  {id:81,cat:"Scholarship",name:"SBB Research Group STEM Scholarship",org:"SBB Research Group Foundation",background:"The SBB Research Group STEM Scholarship encourages and empowers students to create significant value and countless new opportunities for society through their pursuit of higher learning, especially through interdisciplinary combinations of Science, Technology, Engineering, and Mathematics (STEM).",awardRaw:"$2,500",award:2500.0,trip:false,semester:"Year-Round",opens:"2025-12-01",closes:"2026-11-30",projected:false,majors:"Any STEM",years:"Sophomores,  Juniors,  Seniors",gpa:3.5,citizen:false,refs:false,essays:true,employee:false,contact:"scholarship@sbbrg.org",link:"https://www.sbbscholarship.com/more-information#eligibility"},
+  {id:74,cat:"Scholarship",name:"Forte College Scholarship",org:"Forte",background:"On a mission to inspire and invest in the next generation of business leaders, Fort\u00e9 is students' biggest champion as they earn their degree, start careers, and explore options like business school and career growth opportunities. ",awardRaw:"$1,000",award:1000.0,trip:false,semester:"Year-Round",opens:"2026-03-01",closes:"2026-12-02",projected:false,majors:"Any Business",years:"Any",gpa:0.0,citizen:false,refs:false,essays:false,employee:false,contact:"info@fortefoundation.org",link:"https://www.fortefoundation.org/college/scholarships/"},
+  {id:20,cat:"Scholarship",name:"Allied Van Lines Scholarship",org:"Allied Van Lines",background:"Allied Van Lines, one of the leading long distance and cross country moving companies in America, is excited to offer a 2026 scholarship program aimed at students whose area of study focuses on logistics and moving-related fields. We are committed to growing our industry and supporting the brightest students in logistics and moving.",awardRaw:"$1,000",award:1000.0,trip:false,semester:"Fall",opens:"2026-10-01",closes:"2026-12-15",projected:true,majors:"Supply Chain Management",years:"Freshmen,  Sophomores,  Juniors,  Seniors",gpa:2.5,citizen:true,refs:false,essays:true,employee:false,contact:"scholarships@sirva.com",link:"https://www.allied.com/scholarship"},
+  {id:24,cat:"Scholarship",name:"Burger King Scholars Program",org:"Burger King Foundation",background:"The Burger King Scholars Program is meant for employees and their families to be able to pursue their dreams in higher education. Participation in community service, extracurricular activities, or work will all be considered.",awardRaw:"$60,000",award:60000.0,trip:false,semester:"Fall",opens:"2026-10-15",closes:"2026-12-15",projected:true,majors:"Any",years:"High School Admit",gpa:2.0,citizen:true,refs:false,essays:true,employee:true,contact:"burgerkingscholars@scholarshipamerica.org",link:"https://scholarshipamerica.org/scholarship/burgerking/"},
+  {id:34,cat:"Scholarship",name:"North American Van Lines Logistics Scholarship",org:"North American Van Lines",background:"North American Van Lines is proud to announce our first annual Logistics Scholarship contest. Three qualified entrants will each win a  scholarship towards their degree in logistics or supply chain management at the college or university of their choice.",awardRaw:"$1,000",award:1000.0,trip:false,semester:"Fall",opens:"2026-10-01",closes:"2026-12-15",projected:true,majors:"Supply Chain Management",years:"Any",gpa:0.0,citizen:true,refs:false,essays:true,employee:false,contact:"",link:"https://www.northamerican.com/scholarship"},
+  {id:41,cat:"Scholarship",name:"Raftelis Leadership Scholarship",org:" American Water Works Association",background:"The Raftelis Leadership Scholarship is available to promising students with an interest in becoming problem solvers and becoming consultants. An interest in  local government is preferred.",awardRaw:"$5,000",award:5000.0,trip:false,semester:"Fall",opens:"2026-08-01",closes:"2026-12-19",projected:true,majors:"Any Business",years:"Freshmen,  Sophomores,  Juniors,  Seniors,  Graduate",gpa:0.0,citizen:true,refs:true,essays:true,employee:false,contact:"scholarships@awwa.org",link:"https://www.awwa.org/water-equation/awwa-scholarship-program/"},
+  {id:83,cat:"Scholarship",name:"RevPart STEM Scholarship",org:"RevPart",background:"RevPart is proud to support the next generation of science, technology, engineering, and math (STEM) students by providing a scholarship to a student demonstrating excellent promise in their area of study. As an innovator in the tech industry, we understand the importance of the STEM fields and wish to advocate for the industry's future leaders by assisting their efforts towards a degree. ",awardRaw:"$2,500",award:2500.0,trip:false,semester:"Fall",opens:"2026-08-01",closes:"2026-12-31",projected:false,majors:"Any STEM",years:"Freshmen,  Sophomores,  Juniors,  Seniors,  Graduate",gpa:0.0,citizen:false,refs:false,essays:true,employee:false,contact:"info@revpart.com",link:"https://revpart.com/scholarship/"},
+  {id:86,cat:"Scholarship",name:"561 Build STEM Scholarship",org:"South Florida Forensic Engineering",background:"South Florida Forensic Engineering offers one annual Science, Technology, Engineering, and Math (STEM) scholarship to students based on their scholastic achievement and essay describing their background, major, aspirations, and any additional relevant information.",awardRaw:"$1,000",award:1000.0,trip:false,semester:"Fall",opens:"2026-09-22",closes:"2026-12-31",projected:false,majors:"Any Business, Any STEM",years:"Any",gpa:0.0,citizen:false,refs:false,essays:true,employee:false,contact:"561BUILDscholarship@gmail.com",link:"https://www.561build.com/scholarship/"},
+  {id:85,cat:"Competition",name:"MIT THINK Out of the Box Scholars Program",org:"MIT TechX",background:"THINK caters to students who have done extensive research on the background of a potential research project, but lack the resources to complete the project themselves and are looking for additional guidance in the early stages of their project. The program is organized by a group of undergraduates at MIT. Applicants must propose a project with clear goals, an innovative idea, and a practical plan for implementation.",awardRaw:"$1,000",award:1000.0,trip:false,semester:"Fall",opens:"2026-11-02",closes:"2027-01-01",projected:true,majors:"Any",years:"High School Admit",gpa:0.0,citizen:false,refs:false,essays:true,employee:false,contact:"think@mit.edu",link:"https://www.scholarships.com/scholarships/mit-think-out-of-the-box-scholars-program"},
+  {id:37,cat:"Scholarship",name:"Taco Bell Live M\u00e1s Scholarship",org:"Taco Bell Foundation",background:"Taco Bell is all about fueling the doers, dreamers, and cultural rebels who know how to Live M\u00e1s. Whether you\u2019re just discovering what fires you up, chasing your passion every day, or turning it into something bigger, the Live M\u00e1s Scholarship is here to help you level up.\u00a0The scholarship is open to both employees and non-employees who can share how they're pursuing their passion. Awards are renewable.",awardRaw:"$25,000",award:25000.0,trip:false,semester:"Fall",opens:"2026-10-14",closes:"2027-01-06",projected:true,majors:"Any",years:"High School Admit,  Freshmen,  Sophomores,  Juniors,  Seniors",gpa:0.0,citizen:true,refs:false,essays:true,employee:false,contact:"livemasscholarship@tacobell.com",link:"https://www.tacobellfoundation.org/live-mas-scholarship/"},
+  {id:40,cat:"Competition",name:"Microsoft Imagine Cup",org:"Microsoft",background:"Imagine Cup is where student founders turn bold ideas into solutions trusted by organizations worldwide. At every step, you\u2019ll have access to Microsoft\u2019s AI technologies, tailored guidance, and connections that help you refine your product and grow as a founder.  Launch applicant teams with a creative idea get to leverage $5000 of Azure credits to build anything that solves a business problem.",awardRaw:"$50,000",award:50000.0,trip:false,semester:"Fall",opens:"2026-09-30",closes:"2027-01-09",projected:true,majors:"Any",years:"Any",gpa:0.0,citizen:false,refs:false,essays:true,employee:false,contact:"",link:"imaginecup.microsoft.com/en-us"},
+  {id:46,cat:"Scholarship",name:"Amazon Future Engineer Scholarship",org:"Amazon",background:"Amazon Future Engineer students can boost their future for themselves and their community with the support of college funding, paid internships, and industry mentors. Scholarship winners will receive a paid internship at Amazon after their freshman year.",awardRaw:"$40,000",award:40000.0,trip:false,semester:"Fall",opens:"2026-11-10",closes:"2027-01-15",projected:true,majors:"Any Business,  Any Engineering/Technology,  Data Science,  Mathematics/Statistics",years:"High School Admit",gpa:2.3,citizen:true,refs:true,essays:true,employee:false,contact:"AmazonFutureEngineer@ScholarshipAmerica.org",link:"https://www.amazonfutureengineer.com/scholarships"},
+  {id:27,cat:"Competition",name:"NGA Foundation Student Case Study Competition",org:"National Grocers Association",background:"Since it began in 2004, the NGAF Student Case Study Competition has strived to further the professional development of\ncollegiate students pursuing degrees in food and retail programs, expose students to the independent grocery industry, and\nprovide student teams the opportunity to creatively address real-world issues impacting the industry. The NGA Foundation student case study competition brings students from across the country to the NGA Show where they present solutions to an issue currently impacting the independent grocery industry.",awardRaw:"$4,000",award:4000.0,trip:false,semester:"Fall",opens:"2026-10-10",closes:"2027-01-20",projected:true,majors:"Any Business",years:"Freshmen,  Sophomores,  Juniors,  Seniors",gpa:0.0,citizen:false,refs:false,essays:true,employee:false,contact:"nga-foundation@nationalgrocers.org",link:"https://www.nationalgrocers.org/foundation/students/student-case-study-program/"},
+  {id:63,cat:"Scholarship",name:"Supply Chain Management Scholarship",org:"R. Gene and Nancy D. Richter Foundation",background:"The R. Gene and Nancy D. Richter Foundation and the R. Gene Richter Scholarship fund at ISM will provide a scholarship to individuals seeking education in supply management, supply chain management or procurement. Recipients of this award have earned outstanding grades. Transcripts are looked at very closely. Past winners have been involved and active participants in campus activities and are usually an officer in one of the organizations. Others have led charitable efforts within their communities. ",awardRaw:"$7,500",award:7500.0,trip:false,semester:"Fall",opens:"2026-09-15",closes:"2027-01-23",projected:false,majors:"Supply Chain Management",years:"Seniors",gpa:0.0,citizen:true,refs:false,essays:true,employee:false,contact:"membersvcs@ismworld.org",link:"www.ismworld.org/for-individuals/scholarships-and-awards/richter-scholarship-award/"},
+  {id:94,cat:"Scholarship",name:"Licensing International Scholarship Program ",org:"Licensing International",background:"As part of our mission to inspire the next generation of talent globally while advancing the understanding of licensing in society, Licensing International\u2019s Scholarship Program grants scholarships to deserving individuals around the world who are interested in a career in brand licensing and commerce.",awardRaw:"$10,000",award:10000.0,trip:false,semester:"Fall",opens:"2026-11-18",closes:"2027-01-30",projected:true,majors:"Any Business,  Any Engineering/Technology,  Design",years:"Freshmen,  Sophomores,  Juniors,  Seniors",gpa:3.0,citizen:false,refs:true,essays:true,employee:false,contact:"mungaro@licensing.org",link:"licensinginternational.org/about/scholarship-program/"},
+  {id:64,cat:"Scholarship",name:"MHEFI Scholarship",org:"Material Handling Education Foundation Inc.",background:"MHEFI offers scholarship award opportunities to undergraduate students who are pursuing a material handling, logistics or supply chain career. The student should clearly demonstrate dedication to achieving excellence, strong leadership skills, potential for future growth as a leader and persistence in the pursuit of education.",awardRaw:"$6,000",award:6000.0,trip:false,semester:"Fall",opens:"2026-10-01",closes:"2027-01-31",projected:true,majors:"Supply Chain Management",years:"High School Admit,  Freshmen,  Sophomores,  Juniors",gpa:3.0,citizen:false,refs:true,essays:true,employee:false,contact:"mammons@mhi.org",link:"www.mhi.org/mhefi/scholarship"},
+  {id:67,cat:"Scholarship",name:"INKAS Rising Star Scholarship",org:"Khazanski Foundation",background:"The INKAS \"Rising Star\u201d is an annual award and scholarship program funded by the Khazanski Foundation in partnership with INKAS Armored Vehicle Manufacturing and awarded to post-secondary students showing excellence in both engineering and business fields of study. In addition to providing your personal story and an explanation as to why you deserve this scholarship, you are required to explain why you believe either business or engineering is important in Canada\u2019s/U.S. economy and how you feel you will make a difference in your chosen industry.",awardRaw:"$1,840",award:1840.0,trip:false,semester:"Spring",opens:"2026-12-04",closes:"2027-01-31",projected:true,majors:"Any Business,  Any Engineering/Technology",years:"High School Admit,  Freshmen,  Sophomores,  Juniors,  Seniors",gpa:3.0,citizen:true,refs:false,essays:true,employee:false,contact:"",link:"https://inkasarmored.com/inkas-rising-star-scholarship-program/"},
+  {id:100,cat:"Scholarship",name:"1st Formations Business Scholarship",org:"1st Formations",background:"As part of our ongoing dedication to supporting new business, we are helping to fund the next generation of entrepreneurs. Our Scholarship provides additional funding for those who need it most, assisting budding entrepreneurs in accessing the education, skills and knowledge required to run their own business in the future. Applicants must submit a  business idea they would like to pursue",awardRaw:"$750",award:750.0,trip:false,semester:"Fall",opens:"2026-11-29",closes:"2027-01-31",projected:false,majors:"Any Business",years:"High School Admit,  Freshmen,  Sophomores,  Juniors,  Seniors",gpa:0.0,citizen:false,refs:true,essays:true,employee:false,contact:"scholarship@1stformations.co.uk",link:"https://www.1stformations.co.uk/business-scholarship/"},
+  {id:5,cat:"Scholarship",name:"Ritchie-Jennings Memorial Scholarship",org:"ACFE Foundation",background:"The Ritchie-Jennings Memorial Scholarship offers students the opportunity to advance their education and anti-fraud career paths. Award amounts range from $2,000 to $10,000, and recipients also receive a full year of ACFE membership. The scholarship program, established in 1992, was renamed in honor of ACFE members Larry Jennings and Tracy Ritchie, who lost their lives in a terrorist attack in Karachi, Pakistan, in 1997.",awardRaw:"$10,000",award:10000.0,trip:false,semester:"Fall",opens:"2026-09-01",closes:"2027-02-02",projected:false,majors:"Any Business",years:"Any Undergrad/grad",gpa:0.0,citizen:false,refs:true,essays:true,employee:false,contact:"scholarships@acfe.com",link:"www.acfe.com/scholarship.aspx"},
+  {id:6,cat:"Scholarship",name:"Costco Employee Scholarship",org:"Costco",background:"All regular full- and part-time and limited part-time permanent Costco employees residing in the United States and Puerto Rico may be eligible for up to $10,000 in scholarship support to pursue a first-time degree. This is a renewable scholarship dependent on continued employment at a Costco retail location.",awardRaw:"$10,000",award:10000.0,trip:false,semester:"Spring",opens:"2026-12-01",closes:"2027-02-06",projected:true,majors:"Any",years:"High School Admit,  Freshmen,  Sophomores,  Juniors,  Seniors",gpa:0.0,citizen:true,refs:false,essays:false,employee:true,contact:"info@collegesuccessfoundation.org",link:"https://www.collegesuccessfoundation.org/scholarship/costco-employee-scholarship/#eligibility"},
+  {id:33,cat:"Competition",name:"Draper Pitch Competition",org:"Naveen Jindal School of Management",background:"Formerly known as the Big Idea Competition, the undergraduate division of the Draper Pitch Competition is UT Dallas\u2019 flagship entrepreneurship event, bringing together students and alumni to pitch innovative startups and ideas to peers, investors, and an esteemed panel of judges. Powered by the generous support of the Draper Foundation, led by world-renowned venture capitalist Tim Draper, the competition now offers unprecedented opportunities for funding, mentorship, and exposure.",awardRaw:"$50,000",award:50000.0,trip:false,semester:"Spring",opens:"2026-12-01",closes:"2027-02-15",projected:true,majors:"Any",years:"Freshmen,  Sophomores,  Juniors,  Seniors",gpa:0.0,citizen:false,refs:false,essays:true,employee:false,contact:"carol.marcus-rehtmeyer@utdallas.edu",link:"https://innovation.utdallas.edu/draper-pitch-competition/#alumni-eligibility"},
+  {id:93,cat:"Scholarship",name:"Bill Palmer Legacy Scholarship",org:"Applebee\u2019s",background:"Applebee\u2019s International, Inc. has established a scholarship program to assist employees and children of employees who plan to continue their education in college. Academic performance and leadership will be considered.",awardRaw:"$5,000",award:5000.0,trip:false,semester:"Spring",opens:"2026-12-01",closes:"2027-02-16",projected:true,majors:"Any",years:"Any",gpa:0.0,citizen:false,refs:true,essays:true,employee:true,contact:"studentsupport@scholarshipamerica.org",link:"https://learnmore.scholarsapply.org/billpalmer/"},
+  {id:21,cat:"Scholarship",name:"Clarkston Scholars Program",org:"Clarkston Consulting",background:"A Clarkston Scholar is a highly-driven, first-generation college student who excels in the classroom, has an interest in consulting in the fields of consumer products, life sciences, or the retail industry.",awardRaw:"$10,000",award:10000.0,trip:false,semester:"Spring",opens:"2026-12-01",closes:"2027-02-20",projected:true,majors:"Any Business",years:"Sophomores",gpa:0.0,citizen:true,refs:true,essays:true,employee:false,contact:"lmancio@clarkstonconsulting.com",link:"clarkstonconsulting.com/clarkston-scholars-program/"},
+  {id:98,cat:"Scholarship",name:"Gucci Changemakers Scholarship",org:"Gucci",background:"The Gucci Changemakers Scholarship Fund is dedicated to empowering students in creative and business-oriented fields through substantial financial support.",awardRaw:"$25,000",award:25000.0,trip:false,semester:"Spring",opens:"2027-01-01",closes:"2027-02-20",projected:true,majors:"Any Business,  Design",years:"Freshmen,  Sophomores,  Juniors",gpa:0.0,citizen:false,refs:false,essays:true,employee:false,contact:"",link:"https://www.scholarships.com/scholarships/gucci-changemakers-scholarship"},
+  {id:73,cat:"Scholarship",name:"TLF Undergraduate Scholarship",org:"LaGrant Foundation",background:"The TLF Undergraduate Scholarships are open to students studying advertising, marketing, public relations, or a related field.  Undergraduate scholarship recipients will receive a trip where they will participate in career building activities, including a welcome dinner with a keynote speaker, three-day long career development & professional workshops and a scholarship & donor recognition reception in Cincinnati, OH.",awardRaw:"$2,500",award:2500.0,trip:false,semester:"Spring",opens:"2026-06-01",closes:"2027-02-27",projected:true,majors:"Marketing",years:"Freshmen,  Sophomores,  Juniors",gpa:3.2,citizen:true,refs:true,essays:true,employee:false,contact:"",link:"https://lagrantfoundation.org/scholarship-application-process/"},
+  {id:96,cat:"Scholarship",name:"SVCF Samsung Semiconductor Scholarship",org:"SVCF",background:"The Samsung Semiconductor Scholarship program, inspired by the theme \u201cCollaborate. Innovate. Grow.,\u201d supports the next generation of STEM innovators shaping the future of technology. This program aims to recognize exceptional undergraduate and master\u2019s students in STEM-related fields who embody innovation and diversity.",awardRaw:"$10,000",award:10000.0,trip:false,semester:"Spring",opens:"2026-12-01",closes:"2027-02-27",projected:false,majors:"Any STEM",years:"Sophomores,  Juniors,  Seniors",gpa:3.0,citizen:false,refs:false,essays:true,employee:false,contact:"scholarships@siliconvalleycf.org",link:"www.svcf.org/scholarships/samsung-semiconductor-scholarship"},
+  {id:43,cat:"Scholarship",name:"Opus Scholarship",org:"Opus Group",background:"Opus is an integrated group of commercial real estate development, construction and design companies with offices and projects across the country that has launched a scholarship to support students. Applicants will be judged on academic performance, financial need, involvement in organizations and activities on campus, community involvement and essay responses. ",awardRaw:"$2,500",award:2500.0,trip:false,semester:"Spring",opens:"2027-01-06",closes:"2027-03-01",projected:true,majors:"Any Engineering/Technology,  Architecture,  Design,  Any Business,  Information Systems + CIS Tech",years:"Freshmen,  Sophomores,  Juniors,  Seniors",gpa:0.0,citizen:false,refs:false,essays:true,employee:false,contact:"opusscholarship@opus-group.com",link:"www.opus-group.com/Careers/Scholarships"},
+  {id:72,cat:"Scholarship",name:"SILA Post Secondary College Scholarship ",org:"SILA Foundation",background:"The purpose of the SILA Foundation is to provide an educational forum for the public. Educational content will cover Financial Services, specifically Securities and/or Insurance, and its purpose will be to develop and/or improve individuals\u2019 capabilities regarding Financial Services. Activities may include educational materials, courses, public discussion groups, forums, panels, lectures, personal career development, mentoring, job training, job fairs, or other programs as determined by the SILA Foundation Board of Trustees.",awardRaw:"$2,000",award:2000.0,trip:false,semester:"Spring",opens:"2027-01-01",closes:"2027-03-01",projected:true,majors:"Any Business,  Information Systems + CIS Tech",years:"Freshmen,  Sophomores,  Juniors,  Seniors,  Graduate",gpa:3.0,citizen:true,refs:true,essays:false,employee:false,contact:"scholarships@silafoundation.org",link:"https://www.scholarships.com/scholarships/sila-post-secondary-college-scholarship"},
+  {id:8,cat:"Scholarship",name:"Milton Cooper Trailblazer in Real Estate Award",org:"ICSC",background:"Winners of the Milton Cooper Scholarship will receive an all-expenses-paid trip to ICSC LAS VEGAS, the premier event for commercial real estate professionals. Additionally, recipients will receive complimentary ICSC Student Membership, which provides exclusive access to networking opportunities and resources to propel their careers in this evolving field.",awardRaw:"$10,000",award:10000.0,trip:false,semester:"Spring",opens:"2027-01-01",closes:"2027-03-02",projected:true,majors:"Any",years:"Freshmen,  Sophomores,  Juniors,  Seniors,  Graduate",gpa:3.0,citizen:true,refs:true,essays:true,employee:false,contact:"cmerolle@ICSC.com",link:"https://www.icsc.com/who-we-are/foundation/scholarships/general-scholarships"},
+  {id:9,cat:"Scholarship",name:"Continental Realty Scholarship",org:"ICSC",background:"Applicants must have a demonstrated interest in the retail real estate industry, focusing on the development and management of marketplaces and spaces where people shop, dine, work, play, and gather.",awardRaw:"$5,000",award:5000.0,trip:false,semester:"Spring",opens:"2027-01-01",closes:"2027-03-02",projected:true,majors:"Any",years:"Sophomores,  Juniors,  Seniors",gpa:3.0,citizen:true,refs:true,essays:true,employee:false,contact:"cmerolle@ICSC.com",link:"https://www.icsc.com/who-we-are/foundation/scholarships/general-scholarships"},
+  {id:10,cat:"Scholarship",name:"Edison Charitable Foundation Scholarship",org:"ICSC",background:"The Edison Charitable Foundation Scholarship is available to college students with a demonstrated interest in retail real estate. Special consideration is given to students from underrepresented groups.",awardRaw:"$5,000",award:5000.0,trip:false,semester:"Spring",opens:"2027-01-01",closes:"2027-03-02",projected:true,majors:"Any",years:"Sophomores,  Juniors,  Seniors",gpa:3.0,citizen:true,refs:true,essays:true,employee:false,contact:"cmerolle@ICSC.com",link:"https://www.icsc.com/who-we-are/foundation/scholarships/general-scholarships"},
+  {id:11,cat:"Scholarship",name:"Federal Realty Undergraduate Scholarship",org:"ICSC",background:"The Edison Charitable Foundation Scholarship is available to college students with a demonstrated interest in retail real estate. This award is specifically renewable for sophomores or juniors who apply, but not seniors.",awardRaw:"$5,000",award:5000.0,trip:false,semester:"Spring",opens:"2027-01-01",closes:"2027-03-02",projected:true,majors:"Any",years:"Sophomores,  Juniors,  Seniors",gpa:3.0,citizen:true,refs:true,essays:true,employee:false,contact:"cmerolle@ICSC.com",link:"https://www.icsc.com/who-we-are/foundation/scholarships/general-scholarships"},
+  {id:12,cat:"Scholarship",name:"ICSC Foundation Undergraduate Scholarship",org:"ICSC",background:"The ICSC Foundation Undergraduate Scholarship is general scholarship available to undergraduate college students who are interested in retail real estate or any related fields.",awardRaw:"$5,000",award:5000.0,trip:false,semester:"Spring",opens:"2027-01-01",closes:"2027-03-02",projected:true,majors:"Any",years:"Sophomores,  Juniors,  Seniors",gpa:3.0,citizen:true,refs:true,essays:true,employee:false,contact:"cmerolle@ICSC.com",link:"https://www.icsc.com/who-we-are/foundation/scholarships/general-scholarships"},
+  {id:13,cat:"Scholarship",name:"Kite Realty Group Undergraduate Scholarship",org:"ICSC",background:"The Kite Realty Group Undergraduate Scholarship honors the legacy of Savannah Lee, a talented young professional whose strong work ethic and dedication to her work made a lasting impact on the industry. This scholarship is dedicated to fostering an environment where all voices are valued and supports students who demonstrate leadership, academic achievement and a vision for an inclusive and thriving industry. Students from underrepresented groups are highly encouraged to apply, but this is not required.",awardRaw:"$10,000",award:10000.0,trip:false,semester:"Spring",opens:"2027-01-01",closes:"2027-03-02",projected:true,majors:"Any",years:"Freshmen,  Sophomores,  Juniors,  Seniors",gpa:3.0,citizen:true,refs:true,essays:true,employee:false,contact:"cmerolle@ICSC.com",link:"https://www.icsc.com/who-we-are/foundation/scholarships/general-scholarships"},
+  {id:15,cat:"Scholarship",name:"PGIM Real Estate Scholarship",org:"ICSC",background:"The PGIM Real Estate Scholarship, in Memory of Bernard Winograd supports college students who are interested in retail real estate or related fields. Winners will receive an internship in addition to their award.",awardRaw:"$5,000",award:5000.0,trip:false,semester:"Spring",opens:"2027-01-01",closes:"2027-03-02",projected:true,majors:"Any",years:"Sophomores,  Juniors,  Seniors",gpa:3.0,citizen:true,refs:true,essays:true,employee:false,contact:"cmerolle@ICSC.com",link:"https://www.icsc.com/who-we-are/foundation/scholarships/general-scholarships"},
+  {id:16,cat:"Scholarship",name:"Philips Edison & Company Scholarship",org:"ICSC",background:"The Phillips Edison & Company Scholarship is available to US College students with any interest in the retail real estate industry. Special consideration will be given to students from underrepresented groups.",awardRaw:"$5,000",award:5000.0,trip:false,semester:"Spring",opens:"2027-01-01",closes:"2027-03-02",projected:true,majors:"Any",years:"Sophomores,  Juniors,  Seniors",gpa:3.0,citizen:true,refs:true,essays:true,employee:false,contact:"cmerolle@ICSC.com",link:"https://www.icsc.com/who-we-are/foundation/scholarships/general-scholarships"},
+  {id:18,cat:"Scholarship",name:"Schurgin Family Foundation Entrepreneurial Scholarship",org:"ICSC",background:"The Schurgin Family Foundation Entrepreneurial Scholarship is available to students seeking a bachelor's degree in the retail real estate industry or related fields. Students who can demonstrate their entrepreneurial drive and spirit are welcome to apply.",awardRaw:"$10,000",award:10000.0,trip:false,semester:"Spring",opens:"2027-01-01",closes:"2027-03-02",projected:true,majors:"Any",years:"Freshmen,  Sophomores,  Juniors,  Seniors",gpa:3.0,citizen:true,refs:true,essays:true,employee:false,contact:"cmerolle@ICSC.com",link:"https://www.icsc.com/who-we-are/foundation/scholarships/general-scholarships"},
+  {id:38,cat:"Scholarship",name:"RMA Foundation Scholarship",org:"Risk Management Association Foundation",background:"The Risk Management Association Foundation offers scholarships to students in an undergraduate program who are interested in working in the financial industry after graduation. Participation or leadership in school, community, or work-related activities is considered.",awardRaw:"$5,000",award:5000.0,trip:false,semester:"Spring",opens:"2027-01-15",closes:"2027-03-15",projected:true,majors:"Any Business",years:"Freshmen,  Sophomores,  Juniors,  Seniors",gpa:0.0,citizen:false,refs:false,essays:true,employee:false,contact:"customers@prosightfa.org",link:"www.rmahq.org/studentresources/scholarships?gmssopc=1"},
+  {id:48,cat:"Scholarship",name:"AICPA Foundation Scholarship for Future CPAs",org:"AICPA Foundation",background:"The AICPA Foundation Scholarship for Future CPAs provides financial assistance to undergraduate or graduate degree students majoring in accounting and interested in pursuing a CPA license after graduation. Applicants must not have a CPA yet and must become an AICPA member (free of charge).",awardRaw:"$10,000",award:10000.0,trip:false,semester:"Spring",opens:"2026-12-01",closes:"2027-03-15",projected:true,majors:"Accounting",years:"Freshmen,  Sophomores,  Juniors,  Seniors,  Graduate",gpa:3.0,citizen:false,refs:true,essays:true,employee:false,contact:"scholarships@aicpa.org",link:"www.thiswaytocpa.com/education/aicpa-legacy-scholarships/future-cpas-scholarship/?ls=1"},
+  {id:76,cat:"Competition",name:"Purdue Digital Marketing Competition",org:"Purdue University Northwest College of Business",background:"Gather a team of 2-4 undergraduate students and register your team to produce a video summarizing your digital marketing strategy for a real client that will be judged by industry professionals.",awardRaw:"$1,000",award:1000.0,trip:false,semester:"Spring",opens:"2027-01-05",closes:"2027-03-20",projected:true,majors:"Marketing",years:"Freshmen,  Sophomores,  Juniors,  Seniors",gpa:0.0,citizen:false,refs:false,essays:true,employee:false,contact:"",link:"https://www.digitalmarketingcompetition.com/"},
+  {id:52,cat:"Scholarship",name:"David R. Parsley Scholarship Fund for Supply Chain Management",org:"NRAEF",background:"Created to encourage students to pursue foodservice supply chain management careers, the David R. Parsley Scholarship offers undergraduate students scholarships. An ideal candidates would be anyone with interest in the restaurant, foodservice and hospitality industry. Applicants must submit an essay about supply chain management.",awardRaw:"$10,000",award:10000.0,trip:false,semester:"Spring",opens:"2027-01-15",closes:"2027-03-25",projected:true,majors:"Supply Chain Management",years:"Freshmen,  Sophomores,  Juniors,  Seniors",gpa:0.0,citizen:false,refs:false,essays:true,employee:false,contact:"scholars@nraef.org",link:"www.supplychainscene.org/professional-development/scholarships"},
+  {id:22,cat:"Competition",name:"ICSC Foundation Case Competition",org:"ICSC",background:"Our University Partners are invited to participate in the ICSC Foundation Case Competition, a virtual challenge that takes place annually in November. Teams may be comprised of four undergraduate students from the same university. Each university may enter only one team. Students may be from any field of study, but a focus on real estate, finance, architecture, law and engineering is ideal. Students must discuss forming a team with JSOM faculty.",awardRaw:"$2,500",award:2500.0,trip:false,semester:"Spring",opens:"2026-01-30",closes:"2026-05-17",projected:false,majors:"Any",years:"Freshmen,  Sophomores,  Juniors,  Seniors",gpa:0.0,citizen:false,refs:false,essays:true,employee:false,contact:"jdulin@ICSC.com",link:"https://www.icsc.com/find-and-connect/student-resources/retail-real-estate-case-competitions"},
+  {id:23,cat:"Competition",name:"ICSC & UNC Retail Real Estate Case Competition",org:"ICSC",background:"The ICSC Foundation has partnered with the University of North Carolina at Chapel Hill to host\u00a0the ICSC & UNC Retail Real Estate Competition, which takes place\u00a0every year at our premier event, ICSC LAS VEGAS. We invite our University Partners to each enter one team. Teams may be comprised of four undergraduate students from the same university. Students must discuss forming a team with JSOM faculty.",awardRaw:"$10,000",award:10000.0,trip:false,semester:"Spring",opens:"2026-01-30",closes:"2026-05-17",projected:false,majors:"Any",years:"Freshmen,  Sophomores,  Juniors,  Seniors",gpa:0.0,citizen:false,refs:false,essays:true,employee:false,contact:"jdulin@ICSC.com",link:"https://www.icsc.com/find-and-connect/student-resources/retail-real-estate-case-competitions"}
+
+];
+
+// ── STATE ─────────────────────────────────────────────────────
+const state = { year:'all', gpa:'', major:'all', status:'all', semester:'all', sort:'deadline', sortDir:1 };
+const tog = { ref:false, essay:false, employee:false, projected:false, expired:true };
+let cart = new Set();
+let calYear = new Date().getFullYear();
+let calMonth = new Date().getMonth();
+let currentModalId = null;
+
+// ── HELPERS ───────────────────────────────────────────────────
+const YEAR_MAP = {
+  hs:['high school admit'], freshman:['freshmen','freshman'],
+  sophomore:['sophomores','sophomore'], junior:['juniors','junior'],
+  senior:['seniors','senior'], grad:['graduate','grad'],
+};
+const MAJOR_MAP = {
+  business:['any business','business analytics','marketing','finance','accounting','supply chain','actuarial','insurance'],
+  marketing:['marketing'], supply_chain:['supply chain'],
+  finance:['finance','accounting','actuarial','insurance'],
+  stem:['any stem','any engineering','engineering','mathematics','statistics','data science','computer science'],
+  design:['design','architecture'],
+  cs:['information systems','cis tech','computer science','data science','business analytics'],
+};
+function matchYear(r,f){if(f==='all')return true;const y=r.years.toLowerCase();if(y==='any'||y.includes('any'))return true;return(YEAR_MAP[f]||[]).some(t=>y.includes(t));}
+function matchMajor(r,f){if(f==='all')return true;const m=r.majors.toLowerCase();if(m==='any'||m.includes('all major'))return true;return(MAJOR_MAP[f]||[f]).some(t=>m.includes(t));}
+function isDueSoon(closes){if(!closes)return false;const now=new Date();const d=new Date(closes);return(d-now)/(86400000)>=0&&(d-now)/(86400000)<=7;}
+function fmtDate(s){if(!s)return'Check website';const d=new Date(s);return isNaN(d)?s:d.toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'});}
+function fmtYears(y){if(!y)return'Any';return y.split(',').map(s=>s.trim()).filter(Boolean).join(', ')||'Any';}
+function truncate(s,n){return s&&s.length>n?s.slice(0,n)+'...':(s||'');}
+function getFiltered(){
+  const gpa=parseFloat(state.gpa)||0;
+  return DB.filter(r=>{
+    if(!matchYear(r,state.year))return false;
+    if(gpa>0&&r.gpa>gpa)return false;
+    if(!matchMajor(r,state.major))return false;
+    if(state.status==='citizen'&&!r.citizen)return false;
+    if(state.status==='anyone'&&r.citizen)return false;
+    if(state.semester!=='all'&&!r.semester.toLowerCase().includes(state.semester.toLowerCase()))return false;
+    if(tog.ref&&r.refs)return false;
+    if(tog.essay&&r.essays)return false;
+    if(tog.employee&&!r.employee)return false;
+    if(tog.projected&&r.projected)return false;
+    if(tog.expired&&isExpired(r.closes))return false;
+    return true;
+  }).sort((a,b)=>{
+    let v=0;
+    if(state.sort==='deadline'){const da=a.closes?new Date(a.closes):new Date('2099-01-01');const db=b.closes?new Date(b.closes):new Date('2099-01-01');v=da-db;}
+    else if(state.sort==='award')v=b.award-a.award;
+    else v=a.name.localeCompare(b.name);
+    return v*state.sortDir;
+  });
+}
+
+// ── TABS ──────────────────────────────────────────────────────
+function switchTab(tab){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.nav-tab').forEach(t=>t.classList.toggle('active',t.dataset.tab===tab));
+  document.getElementById('page-'+tab).classList.add('active');
+  if(tab==='calendar'){renderCalendar();renderHeatmap();}
+  if(tab==='cart')renderCart();
+  if(tab==='backend')renderBackend();
+}
+
+// ── CART ──────────────────────────────────────────────────────
+function isExpired(closes){if(!closes)return false;const now=new Date();now.setHours(0,0,0,0);const d=new Date(closes);d.setHours(0,0,0,0);return d<now;}
+function toggleCart(id,e){
+  if(e)e.stopPropagation();
+  if(cart.has(id)){cart.delete(id);}
+  else{
+    const r=DB.find(x=>x.id===id);
+    if(r&&isExpired(r.closes)){
+      showExpiredError(id);return;
+    }
+    cart.add(id);
+  }
+  updateCartCount(); render();
+}
+function showExpiredError(id){
+  const existing=document.getElementById('expired-err-'+id);
+  if(existing){existing.remove();}
+  const card=document.querySelector('[data-card-id="'+id+'"]');
+  if(!card)return;
+  const msg=document.createElement('div');
+  msg.id='expired-err-'+id;
+  msg.style.cssText='background:rgba(184,50,50,0.1);border:1px solid rgba(184,50,50,0.35);color:#b83232;border-radius:8px;padding:7px 11px;font-size:0.75rem;line-height:1.4;margin-top:4px;';
+  msg.innerHTML='&#x26A0;&#xFE0F; <strong>Deadline has passed.</strong> This scholarship is no longer accepting applications.';
+  card.querySelector('.card-actions').after(msg);
+  setTimeout(()=>{if(msg.parentNode)msg.remove();},4000);
+}
+function updateCartCount(){
+  const n=cart.size;
+  const el=document.getElementById('cartCount');
+  el.textContent=n; el.classList.toggle('hidden',n===0);
+}
+
+// ── RENDER CARDS ──────────────────────────────────────────────
+function render(){
+  const results=getFiltered();
+  document.getElementById('resultCount').textContent=results.length;
+  const c=document.getElementById('cardsContainer');
+  if(!results.length){c.innerHTML='<div class="empty"><h3>No matches found</h3><p>Try adjusting your filters.</p></div>';return;}
+  c.innerHTML=results.map((r,i)=>{
+    const dueSoon=isDueSoon(r.closes);
+    const inCart=cart.has(r.id);
+    const awardHtml=r.trip?'<div class="award-line trip">&#x2708;&#xFE0F; '+r.awardRaw+'</div>':r.award===0?'<div class="award-line varies">'+r.awardRaw+'</div>':'<div class="award-line">'+r.awardRaw+'</div>';
+    return '<div class="card'+(inCart?' in-cart':'')+'" data-card-id="'+r.id+'" style="animation-delay:'+Math.min(i*0.02,0.4)+'s" onclick="openModal('+r.id+')">'
+      +'<div class="card-badges">'
+      +'<span class="badge badge-'+r.cat.toLowerCase()+'">'+r.cat+'</span>'
+      +(dueSoon?'<span class="badge badge-duesoon">&#128197; Due Soon</span>':'')
+      +(inCart?'<span class="badge badge-incart">&#x2713; In Cart</span>':'')
+      +(r.projected?'<span class="badge badge-projected">Est. Dates</span>':'')
+      +(r.employee?'<span class="badge badge-employee">Employee</span>':'')
+      +'</div>'
+      +'<div class="card-name">'+r.name+'</div>'
+      +'<div class="card-org">'+r.org+'</div>'
+      +awardHtml
+      +'<div class="meta-grid">'
+      +'<div class="meta-item"><span class="meta-key">Deadline</span><span class="meta-val">'+fmtDate(r.closes)+'</span></div>'
+      +'<div class="meta-item"><span class="meta-key">Semester</span><span class="meta-val">'+r.semester+'</span></div>'
+      +'<div class="meta-item"><span class="meta-key">Min GPA</span><span class="meta-val">'+(r.gpa>0?r.gpa.toFixed(1):'None')+'</span></div>'
+      +'<div class="meta-item"><span class="meta-key">Eligible Years</span><span class="meta-val">'+fmtYears(r.years)+'</span></div>'
+      +'</div>'
+      +'<div class="req-pills">'
+      +(r.refs?'<span class="req-pill yes">References Req.</span>':'<span class="req-pill">No Refs</span>')
+      +(r.essays?'<span class="req-pill yes">Essay Req.</span>':'<span class="req-pill">No Essay</span>')
+      +(r.employee?'<span class="req-pill yes">Employee Only</span>':'')
+      +'</div>'
+      +'<div class="card-actions" onclick="event.stopPropagation()">'
+      +(isExpired(r.closes)
+        ?'<button class="btn-cart" style="opacity:0.45;cursor:not-allowed;border-color:var(--muted);color:var(--muted)" onclick="toggleCart('+r.id+',event)">&#x26A0; Deadline Passed</button>'
+        :'<button class="btn-cart'+(inCart?' remove':'')+'" onclick="toggleCart('+r.id+',event)">'+(inCart?'&#x2212; Remove from Cart':'&#x1F6D2; Add to Cart')+'</button>'
+      )
+      +'<button class="btn-info" onclick="openModal('+r.id+')">Details</button>'
+      +'</div>'
+      +'</div>';
+  }).join('');
+}
+
+// ── MODAL ─────────────────────────────────────────────────────
+function openModal(id){
+  const r=DB.find(x=>x.id===id);if(!r)return;
+  currentModalId=id;
+  const dueSoon=isDueSoon(r.closes);
+  let badges='<span class="badge badge-'+r.cat.toLowerCase()+'">'+r.cat+'</span>';
+  if(dueSoon)badges+='<span class="badge badge-duesoon">&#128197; Due Soon</span>';
+  if(r.projected)badges+='<span class="badge badge-projected">Est. Dates</span>';
+  if(r.employee)badges+='<span class="badge badge-employee">Employee</span>';
+  document.getElementById('modalBadges').innerHTML=badges;
+  document.getElementById('modalTitle').textContent=r.name;
+  document.getElementById('modalOrg').textContent=r.org;
+  const aEl=document.getElementById('modalAward');
+  aEl.textContent=r.trip?'✈️ '+r.awardRaw:r.awardRaw;
+  aEl.className='modal-award'+(r.trip?' trip':'');
+  document.getElementById('modalBackground').textContent=r.background||'No background available.';
+  document.getElementById('modalGrid').innerHTML=
+    '<div class="modal-meta"><span class="modal-meta-key">Deadline</span><span class="modal-meta-val">'+fmtDate(r.closes)+'</span></div>'
+    +'<div class="modal-meta"><span class="modal-meta-key">Opens</span><span class="modal-meta-val">'+fmtDate(r.opens)+'</span></div>'
+    +'<div class="modal-meta"><span class="modal-meta-key">Semester</span><span class="modal-meta-val">'+r.semester+'</span></div>'
+    +'<div class="modal-meta"><span class="modal-meta-key">Min GPA</span><span class="modal-meta-val">'+(r.gpa>0?r.gpa.toFixed(1):'None')+'</span></div>'
+    +'<div class="modal-meta"><span class="modal-meta-key">Eligible Years</span><span class="modal-meta-val">'+fmtYears(r.years)+'</span></div>'
+    +'<div class="modal-meta"><span class="modal-meta-key">Majors</span><span class="modal-meta-val">'+r.majors+'</span></div>'
+    +'<div class="modal-meta"><span class="modal-meta-key">Citizenship</span><span class="modal-meta-val">'+(r.citizen?'US Citizen/Resident':'Anyone')+'</span></div>';
+  document.getElementById('modalPills').innerHTML=
+    (r.refs?'<span class="modal-pill yes">Scholarship Requires References</span>':'<span class="modal-pill">No References Required</span>')
+    +(r.essays?'<span class="modal-pill yes">Scholarship Requires Essay/Video</span>':'<span class="modal-pill">No Essay Required</span>')
+    +(r.employee?'<span class="modal-pill yes">Employee Only</span>':'')
+    +'<span class="modal-pill '+(r.citizen?'yes':'')+'">'+( r.citizen?'US Only':'Open to Anyone')+'</span>';
+  const link=r.link&&r.link!=='nan'?(r.link.startsWith('http')?r.link:'https://'+r.link):'#';
+  document.getElementById('modalLink').href=link;
+  document.getElementById('modalContact').textContent=r.contact&&r.contact!=='nan'?'Contact: '+r.contact:'';
+  updateModalCartBtn();
+  document.getElementById('modalOverlay').classList.add('open');
+  document.body.style.overflow='hidden';
+}
+function updateModalCartBtn(){
+  const btn=document.getElementById('modalCartBtn');
+  const r=DB.find(x=>x.id===currentModalId);
+  if(r&&isExpired(r.closes)&&!cart.has(currentModalId)){
+    btn.innerHTML='&#x26A0; Deadline Passed';
+    btn.className='modal-cart-btn';
+    btn.style.cssText='opacity:0.45;cursor:not-allowed;border-color:var(--muted);color:var(--muted);';
+  } else {
+    btn.style.cssText='';
+    if(cart.has(currentModalId)){btn.innerHTML='&#x2212; Remove from Cart';btn.className='modal-cart-btn remove';}
+    else{btn.innerHTML='&#x1F6D2; Add to Cart';btn.className='modal-cart-btn';}
+  }
+}
+function toggleCartFromModal(){
+  const r=DB.find(x=>x.id===currentModalId);
+  if(r&&isExpired(r.closes)&&!cart.has(currentModalId))return;
+  toggleCart(currentModalId);updateModalCartBtn();
+}
+function closeModal(e){if(e.target===document.getElementById('modalOverlay'))closeModalDirect();}
+function closeModalDirect(){document.getElementById('modalOverlay').classList.remove('open');document.body.style.overflow='';}
+document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeModalDirect();closeCheckout();}});
+
+// ── CALENDAR ──────────────────────────────────────────────────
+function calNav(dir){calMonth+=dir;if(calMonth>11){calMonth=0;calYear++;}else if(calMonth<0){calMonth=11;calYear--;}renderCalendar();}
+function renderCalendar(){
+  const months=['January','February','March','April','May','June','July','August','September','October','November','December'];
+  document.getElementById('calMonthLabel').textContent=months[calMonth]+' '+calYear;
+  const today=new Date();today.setHours(0,0,0,0);
+  const firstDay=new Date(calYear,calMonth,1).getDay();
+  const daysInMonth=new Date(calYear,calMonth+1,0).getDate();
+  const daysInPrev=new Date(calYear,calMonth,0).getDate();
+  const eventsMap={};
+  DB.forEach(r=>{
+    if(r.opens){const d=new Date(r.opens);if(d.getFullYear()===calYear&&d.getMonth()===calMonth){const k=d.getDate();if(!eventsMap[k])eventsMap[k]=[];eventsMap[k].push({type:'opens',r});}}
+    if(r.closes){const d=new Date(r.closes);if(d.getFullYear()===calYear&&d.getMonth()===calMonth){const k=d.getDate();if(!eventsMap[k])eventsMap[k]=[];eventsMap[k].push({type:'closes',r});}}
+  });
+  const dayNames=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+  let html=dayNames.map(d=>'<div class="cal-day-header">'+d+'</div>').join('');
+  for(let i=firstDay-1;i>=0;i--){html+='<div class="cal-day other-month"><div class="cal-day-num">'+(daysInPrev-i)+'</div></div>';}
+  for(let d=1;d<=daysInMonth;d++){
+    const dayDate=new Date(calYear,calMonth,d);dayDate.setHours(0,0,0,0);
+    const isToday=dayDate.getTime()===today.getTime();
+    const evs=eventsMap[d]||[];
+    let evHtml='';
+    evs.slice(0,4).forEach(ev=>{
+      const dueSoon=isDueSoon(ev.r.closes)&&ev.type==='closes';
+      evHtml+='<div class="cal-event '+(dueSoon?'duesoon':ev.type)+'" title="'+ev.r.name+'" onclick="openModal('+ev.r.id+')">'+(ev.type==='opens'?'&#x1F7E2; ':'&#x1F534; ')+ev.r.name+'</div>';
+    });
+    if(evs.length>4)evHtml+='<div style="font-size:0.6rem;color:var(--muted);padding:2px 4px">+'+(evs.length-4)+' more</div>';
+    html+='<div class="cal-day'+(isToday?' today':'')+'"><div class="cal-day-num">'+d+'</div>'+evHtml+'</div>';
+  }
+  const totalCells=Math.ceil((firstDay+daysInMonth)/7)*7;
+  const remaining=totalCells-(firstDay+daysInMonth);
+  for(let d=1;d<=remaining;d++){html+='<div class="cal-day other-month"><div class="cal-day-num">'+d+'</div></div>';}
+  document.getElementById('calGrid').innerHTML=html;
+}
+
+// ── YEAR HEATMAP ──────────────────────────────────────────────
+let heatmapYear = new Date().getFullYear();
+function renderHeatmap(){
+  document.getElementById('heatmapYearLabel').textContent = heatmapYear;
+  const months=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  const fullMonths=['January','February','March','April','May','June','July','August','September','October','November','December'];
+  // Count deadlines per month for this year (closes dates only)
+  const counts = new Array(12).fill(0);
+  DB.forEach(r=>{
+    if(r.closes){const d=new Date(r.closes);if(d.getFullYear()===heatmapYear)counts[d.getMonth()]++;}
+  });
+  const maxCount = Math.max(...counts, 1);
+  function getHeatColor(n){
+    if(n===0)return{bg:'#f0ede6',border:'1px solid var(--border)',text:'var(--muted)'};
+    const ratio=n/maxCount;
+    if(ratio<=0.2)return{bg:'rgba(184,50,50,0.12)',border:'1px solid rgba(184,50,50,0.2)',text:'#b83232'};
+    if(ratio<=0.4)return{bg:'rgba(184,50,50,0.28)',border:'1px solid rgba(184,50,50,0.35)',text:'#b83232'};
+    if(ratio<=0.7)return{bg:'rgba(184,50,50,0.5)',border:'1px solid rgba(184,50,50,0.6)',text:'#fff'};
+    return{bg:'#b83232',border:'1px solid #8a1a1a',text:'#fff'};
+  }
+
+  // ── Dynamic insight text based on actual data ──────────────
+  const monthNames_full=['January','February','March','April','May','June','July','August','September','October','November','December'];
+  const busyThreshold = maxCount * 0.65;
+  const busyMonths = counts.map((c,i)=>({c,i})).filter(x=>x.c>=busyThreshold && x.c>0).sort((a,b)=>b.c-a.c);
+  const quietMonths = counts.map((c,i)=>({c,i})).filter(x=>x.c===0);
+  const totalDeadlines = counts.reduce((s,c)=>s+c,0);
+  let insightHtml = '\u{1F4CC} ';
+  if(totalDeadlines === 0){
+    insightHtml += '<strong>No deadlines found for ' + heatmapYear + '.</strong> Try navigating to a different year.';
+  } else if(busyMonths.length === 0){
+    insightHtml += '<strong>Deadlines are spread evenly across ' + heatmapYear + '</strong> — no single month is dramatically busier than others. A manageable pace throughout the year.';
+  } else if(busyMonths.length === 1){
+    const bm = busyMonths[0];
+    const quietNote = quietMonths.length>0?' Use the quieter months to get a head start.':'';
+    insightHtml += '<strong>' + monthNames_full[bm.i] + ' is the peak deadline month</strong> for ' + heatmapYear + ' with <strong>' + bm.c + ' deadline' + (bm.c!==1?'s':'') + '</strong>. Plan ahead — this is when you will need the most bandwidth.' + quietNote;
+  } else {
+    const busyNames = busyMonths.slice(0,3).map(x=>'<strong>' + monthNames_full[x.i] + '</strong> (' + x.c + ')').join(', ');
+    insightHtml += 'The busiest months in ' + heatmapYear + ' are ' + busyNames + '. ';
+    const springBusy = busyMonths.filter(x=>x.i>=1&&x.i<=4).length;
+    const fallBusy = busyMonths.filter(x=>x.i>=8&&x.i<=10).length;
+    if(springBusy>=2 && fallBusy>=2){
+      insightHtml += 'Both Spring (Feb\u2013Apr) and Fall (Sep\u2013Nov) are heavy \u2014 typical for scholarship cycles aligned with academic semesters. Start early to avoid crunch time during finals and midterms.';
+    } else if(springBusy>fallBusy){
+      insightHtml += 'Spring deadlines dominate this year. Start gathering materials in January so you are not scrambling while also preparing for finals.';
+    } else if(fallBusy>springBusy){
+      insightHtml += 'Fall deadlines are heaviest this year. Begin applications over the summer so you are not scrambling alongside midterm season.';
+    } else {
+      insightHtml += 'Deadlines are spread across the year \u2014 click any month cell to jump directly to that calendar view.';
+    }
+  }
+  const insightEl = document.getElementById('heatmapInsight');
+  if(insightEl) insightEl.innerHTML = insightHtml;
+
+  const grid=document.getElementById('heatmapGrid');
+  grid.innerHTML='<div style="display:grid;grid-template-columns:repeat(6,1fr);gap:8px;">'
+    +months.map((m,i)=>{
+      const c=getHeatColor(counts[i]);
+      return `<div style="background:${c.bg};border:${c.border};border-radius:10px;padding:14px 10px;text-align:center;cursor:pointer;transition:all 0.18s;"
+        onclick="calMonth=${i};calYear=heatmapYear;renderCalendar();switchTab('calendar')"
+        title="${fullMonths[i]}: ${counts[i]} deadline${counts[i]!==1?'s':''}">
+        <div style="font-weight:700;font-size:0.95rem;color:${c.text};">${m}</div>
+        <div style="font-size:1.3rem;font-weight:800;color:${c.text};margin:4px 0;">${counts[i]}</div>
+        <div style="font-size:0.65rem;text-transform:uppercase;letter-spacing:0.08em;color:${c.text};opacity:0.8;">deadline${counts[i]!==1?'s':''}</div>
+      </div>`;
+    }).join('')
+    +'</div>';
+}
+
+// ── CART PAGE ─────────────────────────────────────────────────
+function renderCart(){
+  const el=document.getElementById('cartContent');
+  if(cart.size===0){el.innerHTML='<div class="cart-empty"><h3>Your cart is empty</h3><p>Browse scholarships and click "Add to Cart" to save them here.</p></div>';return;}
+  const items=DB.filter(r=>cart.has(r.id)).sort((a,b)=>{
+    const da=a.closes?new Date(a.closes):new Date('2099-01-01');
+    const db=b.closes?new Date(b.closes):new Date('2099-01-01');
+    return da-db;
+  });
+  const totalAward=items.reduce((s,r)=>s+(r.award||0),0);
+  const essaysNeeded=items.filter(r=>r.essays).length;
+  const refsNeeded=items.filter(r=>r.refs).length;
+  const dueSoonCount=items.filter(r=>isDueSoon(r.closes)).length;
+  const today=new Date();today.setHours(0,0,0,0);
+  const daysArr=items.filter(r=>r.closes).map(r=>{const d=new Date(r.closes);d.setHours(0,0,0,0);return Math.max(0,Math.round((d-today)/(1000*60*60*24)));});
+  const avgDays=daysArr.length>0?Math.round(daysArr.reduce((a,b)=>a+b,0)/daysArr.length):null;
+
+  const allCompetitions=items.every(r=>r.cat==='Competition');
+  const hasCompetitions=items.some(r=>r.cat==='Competition');
+  const hasScholarships=items.some(r=>r.cat!=='Competition');
+  const itemLabel=allCompetitions?(items.length===1?'Competition':'Competitions'):(hasCompetitions&&hasScholarships?(items.length===1?'Opportunity':'Opportunities'):(items.length===1?'Scholarship':'Scholarships'));
+  const unitLabel=allCompetitions?(essaysNeeded===1?'Competition':'Competitions'):(hasCompetitions&&hasScholarships?(essaysNeeded===1?'Opportunity':'Opportunities'):(essaysNeeded===1?'Scholarship':'Scholarships'));
+  const unitLabelRef=allCompetitions?(refsNeeded===1?'Competition':'Competitions'):(hasCompetitions&&hasScholarships?(refsNeeded===1?'Opportunity':'Opportunities'):(refsNeeded===1?'Scholarship':'Scholarships'));
+  const dueSoonUnit=allCompetitions?(dueSoonCount===1?'competition':'competitions'):(hasCompetitions&&hasScholarships?(dueSoonCount===1?'opportunity':'opportunities'):(dueSoonCount===1?'scholarship':'scholarships'));
+
+  let summaryHtml='<div class="cart-summary-box">'
+    +'<h3>Your Cart Summary</h3>'
+    +'<div class="cart-summary-stats">'
+    +'<div class="cart-stat"><div class="cart-stat-val">'+items.length+'</div><div class="cart-stat-key">'+itemLabel+'</div></div>'
+    +'<div class="cart-stat"><div class="cart-stat-val">$'+(totalAward>0?totalAward.toLocaleString():'—')+'</div><div class="cart-stat-key">Max Award Value</div></div>'
+    +'<div class="cart-stat"><div class="cart-stat-val">'+essaysNeeded+'</div><div class="cart-stat-key">'+unitLabel+' Req. Essay</div></div>'
+    +'<div class="cart-stat"><div class="cart-stat-val">'+refsNeeded+'</div><div class="cart-stat-key">'+unitLabelRef+' Req. Refs</div></div>'
+    +'<div class="cart-stat"><div class="cart-stat-val">'+(avgDays!==null?avgDays+'d':'—')+'</div><div class="cart-stat-key">Avg Days Remaining</div></div>'
+    +'</div>'
+    +(dueSoonCount>0?'<div style="background:rgba(184,50,50,0.15);border-radius:8px;padding:10px 14px;font-size:0.82rem;color:#b83232;margin-top:4px">&#128197; <strong>'+dueSoonCount+' '+dueSoonUnit+'</strong> closing within 7 days — apply soon!</div>':'')
+    +'<div class="cart-actions" style="margin-top:16px">'
+    +'<button class="btn-primary" onclick="openCheckout()">&#x1F4CB; Checkout</button>'
+    +'<button class="btn-secondary" onclick="clearCart()">&#x1F5D1; Clear Cart</button>'
+    +'</div></div>';
+
+  let itemsHtml='<div class="cart-items">'+items.map(r=>{
+    const dueSoon=isDueSoon(r.closes);
+    const awardHtml=r.trip?'<div class="cart-item-award trip">&#x2708;&#xFE0F; '+r.awardRaw+'</div>':'<div class="cart-item-award">'+r.awardRaw+'</div>';
+    const link=r.link&&r.link!=='nan'?(r.link.startsWith('http')?r.link:'https://'+r.link):'#';
+    let badges='<span class="badge badge-'+r.cat.toLowerCase()+'">'+r.cat+'</span>';
+    if(dueSoon)badges+='<span class="badge badge-duesoon">&#128197; Due Soon</span>';
+    if(r.projected)badges+='<span class="badge badge-projected">Est. Dates</span>';
+    if(r.employee)badges+='<span class="badge badge-employee">Employee</span>';
+    return '<div class="cart-item">'
+      +'<div class="cart-item-left">'
+      +'<div class="cart-item-badges">'+badges+'</div>'
+      +'<div class="cart-item-name">'+r.name+'</div>'
+      +'<div class="cart-item-org">'+r.org+'</div>'
+      +awardHtml
+      +'<div class="cart-item-summary">'+truncate(r.background,220)+'</div>'
+      +'<div class="cart-item-meta">'
+      +'<span class="cart-meta-tag"><span class="cart-meta-icon">&#x1F4C5;</span>'+fmtDate(r.closes)+'</span>'
+      +'<span class="cart-meta-tag"><span class="cart-meta-icon">&#x1F393;</span>'+fmtYears(r.years)+'</span>'
+      +(r.gpa>0?'<span class="cart-meta-tag"><span class="cart-meta-icon">&#x2B50;</span>GPA '+r.gpa.toFixed(1)+'+</span>':'')
+      +(r.refs?'<span class="cart-meta-tag"><span class="cart-meta-icon">&#x1F4DD;</span>References</span>':'')
+      +(r.essays?'<span class="cart-meta-tag"><span class="cart-meta-icon">&#x270D;&#xFE0F;</span>Essay/Video</span>':'')
+      +'</div></div>'
+      +'<div class="cart-item-right">'
+      +'<button class="cart-remove-btn" onclick="removeFromCart('+r.id+')">Remove</button>'
+      +'<a class="cart-link" href="'+link+'" target="_blank">Apply &#x2192;</a>'
+      +'</div></div>';
+  }).join('')+'</div>';
+
+  el.innerHTML=summaryHtml+itemsHtml;
+}
+function removeFromCart(id){cart.delete(id);updateCartCount();render();renderCart();}
+function clearCart(){cart.clear();updateCartCount();render();renderCart();}
+
+// ── CHECKOUT MODAL ────────────────────────────────────────────
+function openCheckout(){
+  ['coFirstName','coLastName','coEmail'].forEach(id=>{
+    document.getElementById(id).value='';
+    document.getElementById(id).classList.remove('error');
+  });
+  if(document.getElementById('coMajor'))document.getElementById('coMajor').value='';
+  ['errFirstName','errLastName','errEmail'].forEach(id=>document.getElementById(id).classList.remove('visible'));
+  document.getElementById('checkoutOverlay').classList.add('open');
+  document.body.style.overflow='hidden';
+  setTimeout(()=>document.getElementById('coFirstName').focus(),100);
+}
+function closeCheckout(){
+  document.getElementById('checkoutOverlay').classList.remove('open');
+  document.body.style.overflow='';
+}
+function validateEmail(netid){
+  // Now accepts just the netid part (no @domain needed)
+  return /^[a-zA-Z0-9._-]+$/.test(netid.trim()) && netid.trim().length > 0;
+}
+function submitCheckout(){
+  const firstName=document.getElementById('coFirstName').value.trim();
+  const lastName=document.getElementById('coLastName').value.trim();
+  const netid=document.getElementById('coEmail').value.trim();
+  const email=netid+'@utdallas.edu';
+  const major=document.getElementById('coMajor')?document.getElementById('coMajor').value:'';
+  let valid=true;
+
+  document.getElementById('coFirstName').classList.remove('error');
+  document.getElementById('coLastName').classList.remove('error');
+  document.getElementById('coEmail').classList.remove('error');
+  document.getElementById('errFirstName').classList.remove('visible');
+  document.getElementById('errLastName').classList.remove('visible');
+  document.getElementById('errEmail').classList.remove('visible');
+
+  if(!firstName){document.getElementById('coFirstName').classList.add('error');document.getElementById('errFirstName').classList.add('visible');valid=false;}
+  if(!lastName){document.getElementById('coLastName').classList.add('error');document.getElementById('errLastName').classList.add('visible');valid=false;}
+  if(!validateEmail(netid)){
+    document.getElementById('coEmail').classList.add('error');
+    const errEl=document.getElementById('errEmail');
+    if(!netid){errEl.textContent='Please enter your UTD NetID.';}
+    else{errEl.textContent='Please enter a valid NetID (letters, numbers, dots, hyphens only).';}
+    errEl.classList.add('visible');valid=false;
+  }
+  if(!valid)return;
+
+  const btn=document.getElementById('coSubmitBtn');
+  btn.classList.add('loading');btn.textContent='Generating receipt...';
+
+  // Log the checkout
+  const now=new Date();
+  const items=DB.filter(r=>cart.has(r.id));
+  const timestamp=now.toLocaleString('en-US',{weekday:'short',year:'numeric',month:'short',day:'numeric',hour:'2-digit',minute:'2-digit'});
+  const device=getDeviceType();
+  const timeSpent=getTimeSpent();
+
+  // localStorage backup
+  const entry={
+    name:firstName+' '+lastName,
+    email:email,
+    datetime:timestamp,
+    scholarships:items.map(r=>r.name).join('; '),
+    count:items.length,
+    ts:now.getTime()
+  };
+  checkoutLog.push(entry);
+  saveLog();
+
+  // Google Sheets logging (fire and forget)
+  try {
+    fetch(SHEETS_URL,{
+      method:'POST',
+      mode:'no-cors',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({
+        firstName,
+        lastName,
+        email,
+        major:major||'—',
+        timestamp,
+        device,
+        timeSpent,
+        scholarshipCount:items.length,
+        scholarships:items.map(r=>r.name).join('; ')
+      })
+    });
+  } catch(err){ console.warn('Sheets logging failed:',err); }
+
+  setTimeout(()=>{
+    generateReceipt(firstName,lastName,email,items,major);
+    btn.classList.remove('loading');btn.innerHTML='&#x2B07; Download Receipt';
+    closeCheckout();
+  },400);
+}
+
+// ── RECEIPT GENERATION ─────────────────────────────────────
+function generateReceipt(firstName,lastName,email,items,major){
+  const today=new Date();today.setHours(0,0,0,0);
+  const totalAward=items.reduce((s,r)=>s+(r.award||0),0);
+  const essaysNeeded=items.filter(r=>r.essays).length;
+  const refsNeeded=items.filter(r=>r.refs).length;
+  const daysArr=items.filter(r=>r.closes).map(r=>{const d=new Date(r.closes);d.setHours(0,0,0,0);return Math.max(0,Math.round((d-today)/(1000*60*60*24)));});
+  const avgDays=daysArr.length>0?Math.round(daysArr.reduce((a,b)=>a+b,0)/daysArr.length):null;
+  const now=new Date();
+  const genDate=now.toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'});
+
+  const wrap=document.createElement('div');
+  wrap.style.cssText='position:fixed;left:-9999px;top:-9999px;width:900px;background:#f0ede6;font-family:\'DM Sans\',sans-serif;color:#1a1a1a;pointer-events:none;z-index:-1;';
+
+  // ── FOCUS ADVISOR LOGIC ──────────────────────────────────
+  const today2=new Date();today2.setHours(0,0,0,0);
+  const daysTo=r=>r.closes?Math.round((new Date(r.closes)-today2)/86400000):9999;
+  const veryUrgentItems=items.filter(r=>daysTo(r)>=0&&daysTo(r)<=14);
+  const soonItems=items.filter(r=>daysTo(r)>=0&&daysTo(r)<=30);
+  const farItems=items.filter(r=>daysTo(r)>90);
+  const noEssayNoRef=items.filter(r=>!r.essays&&!r.refs);
+  const competitions=items.filter(r=>r.cat==='Competition');
+  const employeeScholarships=items.filter(r=>r.employee);
+  const tripAwards=items.filter(r=>r.trip);
+  const highGpaItems=items.filter(r=>r.gpa>=3.5);
+  const modGpaItems=items.filter(r=>r.gpa>=3.0&&r.gpa<3.5);
+  const projectedItems=items.filter(r=>r.projected);
+  const bigAwards=items.filter(r=>r.award>=10000);
+  const citizenOnly=items.filter(r=>r.citizen);
+  const openToAll=items.filter(r=>!r.citizen);
+  const broadMajorTerms=['any','all major'];
+  const majorSpecificItems=items.filter(r=>!broadMajorTerms.some(t=>(r.majors||'').toLowerCase().includes(t)));
+  const majorSpecificRatio=items.length>0?majorSpecificItems.length/items.length:0;
+  const highEssay=essaysNeeded>=Math.ceil(items.length*0.6);
+  const highRef=refsNeeded>=Math.ceil(items.length*0.6);
+  const springItems=items.filter(r=>(r.semester||'').toLowerCase().includes('spring'));
+  const fallItems=items.filter(r=>(r.semester||'').toLowerCase().includes('fall'));
+  const yearRoundItems=items.filter(r=>(r.semester||'').toLowerCase().includes('year')||(r.semester||'').toLowerCase().includes('rolling'));
+
+  let advisorTips=[];
+
+  if(items.length===0){
+    advisorTips.push('Add scholarships to your cart to receive personalized recommendations.');
+  } else {
+
+    // ⚠️ HIGH PRIORITY: ref-required scholarships closing within 21 days
+    const urgentRefItems=items.filter(r=>r.refs&&daysTo(r)>=0&&daysTo(r)<=21);
+    if(urgentRefItems.length>=1){
+      const names=urgentRefItems.map(r=>'<strong>'+r.name+'</strong> ('+daysTo(r)+' day'+(daysTo(r)===1?'':'s')+' left)').join(', ');
+      advisorTips.push('⚠️ HIGH PRIORITY — References due soon: '+names+'. '+(urgentRefItems.length===1?'This scholarship requires':'These scholarships require')+' a letter of recommendation and the deadline is less than 3 weeks away. Contact your recommender immediately — this is your most time-sensitive action item.');
+    }
+
+    // Reference lead time — most time-sensitive logistic
+    if(refsNeeded>=3){
+      advisorTips.push('References required: '+refsNeeded+' of your scholarships require letters of recommendation. Reach out to recommenders now — faculty and staff typically need 2–4 weeks of lead time, especially during midterms and finals.');
+    } else if(refsNeeded===2){
+      advisorTips.push('References required: 2 scholarships in your cart need letters of recommendation. Contact your recommenders early and provide them with a brief description of each award and your eligibility.');
+    } else if(refsNeeded===1){
+      advisorTips.push('References required: 1 scholarship requires a letter of recommendation. Confirm your recommender\'s availability and give them context on the award so their letter can be tailored appropriately.');
+    }
+
+    // Essay workload
+    if(highEssay&&highRef){
+      advisorTips.push('Application workload: Your cart includes a high number of essay and reference requirements. Allocate dedicated time each week for applications and consider drafting a core personal statement that can be adapted across multiple submissions.');
+    } else if(highEssay){
+      advisorTips.push('Essay-heavy cart: Most of your selected scholarships require written statements. A strong central essay that you adapt for each application is more effective — and less time-consuming — than writing each from scratch.');
+    } else if(noEssayNoRef.length===items.length){
+      advisorTips.push('Low-barrier cart: None of your selected scholarships require essays or references. These are efficient to apply for and a good starting point, especially during a busy academic stretch.');
+    } else if(noEssayNoRef.length>=Math.ceil(items.length*0.5)){
+      advisorTips.push('Balanced workload: More than half your scholarships have no essay or reference requirements, giving you a manageable mix of quick applications and more involved ones.');
+    }
+
+    // Deadline urgency
+    if(veryUrgentItems.length>=2){
+      advisorTips.push('Immediate deadlines: '+veryUrgentItems.length+' scholarships close within the next 14 days. Prioritize these before all other applications. If time is limited, focus on the highest-value awards in this group first.');
+    } else if(veryUrgentItems.length===1){
+      advisorTips.push('Immediate deadline: 1 scholarship closes within 14 days. Treat this as your highest priority and ensure all required materials are ready before turning to other applications.');
+    } else if(soonItems.length>0&&farItems.length>0){
+      advisorTips.push('Mixed timeline: You have '+soonItems.length+' scholarship'+(soonItems.length>1?'s':'')+' due within 30 days alongside longer-horizon awards. Complete the near-term applications first, then use the additional time to write stronger submissions for the rest.');
+    } else if(soonItems.length>=2){
+      advisorTips.push('Near-term deadlines: '+soonItems.length+' scholarships close within 30 days. Prioritize these now. A thorough application for fewer awards is more effective than a rushed submission for all of them.');
+    } else if(soonItems.length===1){
+      advisorTips.push('Upcoming deadline: 1 scholarship closes within 30 days. Confirm all required materials and begin the application if you have not already.');
+    } else if(farItems.length===items.length){
+      advisorTips.push('Strong timeline: All your deadlines are more than 90 days away. This lead time is an advantage — use it to write more polished essays, secure stronger references, and tailor each application carefully.');
+    }
+
+    // Average days remaining — only if tight and multi-item
+    if(avgDays!==null&&avgDays<=45&&items.length>=3){
+      advisorTips.push('Timeline pressure: Your average deadline is '+avgDays+' days away across '+items.length+' scholarships. Identify which required materials overlap between applications — shared essays and transcripts can be prepared once and reused.');
+    }
+
+    // Volume
+    if(items.length>=8){
+      advisorTips.push('Cart size: You have '+items.length+' opportunities saved. Quality of application consistently outweighs quantity. Consider narrowing to your strongest 5–6 matches and investing real effort into each one.');
+    } else if(items.length>=5){
+      advisorTips.push('Cart size: '+items.length+' scholarships is a solid set. Keep a running checklist of each deadline, required materials, and submission status to stay organized as you work through them.');
+    } else if(items.length===1){
+      advisorTips.push('Cart size: You have one scholarship saved. Adding a few more — particularly those with minimal requirements — increases your likelihood of securing funding this cycle.');
+    }
+
+    // Major specificity
+    if(majorSpecificRatio<0.25&&items.length>=3){
+      // Check if the student's declared major matches any major-specific items NOT in their cart
+      const majorMatchesAvailable=(()=>{
+        if(!major||major==='Other Major'||!major.trim())return false;
+        const mLow=major.toLowerCase();
+        // Build a mapping from major keywords to DB major field terms
+        const majorKeyMap=[
+          {keys:['accounting'],terms:['accounting']},
+          {keys:['finance'],terms:['finance','actuarial']},
+          {keys:['marketing'],terms:['marketing']},
+          {keys:['supply chain'],terms:['supply chain']},
+          {keys:['information systems','cis tech'],terms:['information systems','cis tech']},
+          {keys:['data science','analytics','artificial intelligence'],terms:['data science','business analytics']},
+          {keys:['computer science'],terms:['computer science']},
+          {keys:['design'],terms:['design','architecture']},
+          {keys:['engineering'],terms:['engineering','stem']},
+        ];
+        const matchedTerms=[];
+        majorKeyMap.forEach(entry=>{
+          if(entry.keys.some(k=>mLow.includes(k)))matchedTerms.push(...entry.terms);
+        });
+        if(matchedTerms.length===0)return false;
+        // Find DB items not in cart that specifically list the student's field (not "any")
+        return DB.some(r=>{
+          if(cart.has(r.id))return false;
+          const dbM=(r.majors||'').toLowerCase();
+          if(broadMajorTerms.some(t=>dbM.includes(t)))return false;
+          return matchedTerms.some(t=>dbM.includes(t));
+        });
+      })();
+      if(majorMatchesAvailable){
+        advisorTips.push('Major alignment: Most of your selected opportunities are open to any major, but there are scholarships in the store specifically listed for your field of study. Consider going back and adding a few that are tailored to your major — field-specific awards often have smaller applicant pools.');
+      } else {
+        advisorTips.push('Major alignment: Most of your selected opportunities are open to any major, which is great for access. Field-specific awards often have less competition — worth filtering by your major to see if any were missed.');
+      }
+    } else if(majorSpecificRatio>=0.5){
+      advisorTips.push('Major alignment: A good portion of your cart targets your specific field of study, which often means less competition. Make sure your essays speak clearly to your academic focus and career direction.');
+    }
+
+    // Deadline clustering — flag if 2+ items share a deadline or fall within 7 days of each other
+    const closingItems=items.filter(r=>r.closes).map(r=>({...r,closeTs:new Date(r.closes).setHours(0,0,0,0)})).sort((a,b)=>a.closeTs-b.closeTs);
+    let clusterCount=0;
+    for(let i=0;i<closingItems.length-1;i++){
+      if(closingItems[i+1].closeTs-closingItems[i].closeTs<=7*86400000)clusterCount++;
+    }
+    if(clusterCount>=1){
+      advisorTips.push('Deadline clustering: Two or more of your opportunities are due within the same week. If your schedule allows it, consider swapping some picks for ones with better-spaced deadlines — stacking submissions in a short window makes it harder to put quality work into each one.');
+    }
+
+    // Competitions — with JSOM faculty note
+    if(competitions.length>=2){
+      advisorTips.push('Competitions: You have '+competitions.length+' competitions in your cart. These require team formation and significantly more lead time than individual scholarship applications. Many JSOM-affiliated competitions also require faculty approval or advisor sign-off before a team can register — confirm the requirements for each and connect with a faculty member early in the process.');
+    } else if(competitions.length===1){
+      advisorTips.push('Competition: You have 1 competition saved. Competitions typically require a team of 2–5 students and, for many JSOM-affiliated events, faculty approval before registration. Identify potential teammates and confirm any faculty sign-off requirements well before the deadline.');
+    }
+
+    // Employee-only
+    if(employeeScholarships.length>0&&employeeScholarships.length===items.length){
+      advisorTips.push('Employee scholarships: All your selected awards are restricted to current employees. Have your employment documentation ready — some applications require proof of employment such as pay stubs or employer verification.');
+    } else if(employeeScholarships.length>0){
+      advisorTips.push('Employee scholarships: '+employeeScholarships.length+' of your awards require current employment with a specific organization. Verify your eligibility for each before investing time in the application.');
+    }
+
+    // Trip/experience awards
+    if(tripAwards.length>=1){
+      advisorTips.push('Experience awards: '+(tripAwards.length===1?'1 award':''+tripAwards.length+' awards')+' in your cart offer an all-expenses experience rather than cash. These often involve additional steps such as interviews or faculty nominations — review the full application process carefully.');
+    }
+
+    // GPA-gated
+    if(highGpaItems.length>=2){
+      advisorTips.push('GPA requirements: '+highGpaItems.length+' scholarships require a 3.5 GPA or above. Verify your current GPA before submitting — borderline eligibility can disqualify an otherwise competitive application.');
+    } else if(modGpaItems.length>=3){
+      advisorTips.push('GPA requirements: Several scholarships require a minimum 3.0 GPA. Confirm your exact GPA before applying — even small discrepancies can affect eligibility.');
+    }
+
+    // Citizenship mix
+    if(citizenOnly.length>0&&openToAll.length>0){
+      advisorTips.push('Citizenship requirements: Your cart includes both US-citizen-only awards ('+citizenOnly.length+') and awards open to all applicants ('+openToAll.length+'). Review citizenship restrictions carefully for each scholarship before applying.');
+    } else if(citizenOnly.length===items.length&&items.length>=2){
+      advisorTips.push('Citizenship requirements: All selected scholarships are restricted to US citizens or permanent residents. Confirm your current status meets the eligibility criteria for each award.');
+    }
+
+    // Seasonal focus
+    if(springItems.length>=3&&fallItems.length===0){
+      advisorTips.push('Spring focus: Your cart is concentrated in Spring-cycle scholarships. This is typical for the current period, but note that Fall and year-round awards will open in late summer — worth revisiting this tool then.');
+    } else if(fallItems.length>=3&&springItems.length===0){
+      advisorTips.push('Fall focus: Your cart is concentrated in Fall-cycle scholarships. Use the preceding summer to draft materials so you are prepared when the academic year begins.');
+    } else if(yearRoundItems.length>=2){
+      advisorTips.push('Rolling deadlines: '+yearRoundItems.length+' scholarships have rolling or year-round deadlines. Set your own target submission dates for these — open-ended timelines are easy to defer indefinitely.');
+    }
+
+    // Projected dates
+    if(projectedItems.length>=3){
+      advisorTips.push('Estimated dates: '+projectedItems.length+' scholarships have projected rather than confirmed deadlines. These are based on prior cycles and may change. Verify official dates on each sponsor\'s website before planning your schedule around them.');
+    } else if(projectedItems.length>=1){
+      advisorTips.push('Estimated dates: '+(projectedItems.length===1?'1 scholarship has':''+projectedItems.length+' scholarships have')+' projected deadlines. Check the official application pages to confirm dates before the cycle opens.');
+    }
+
+    // High-value awards
+    if(bigAwards.length>=1&&items.length>=3){
+      advisorTips.push('High-value awards: You have '+bigAwards.length+' scholarship'+(bigAwards.length>1?'s':'')+' worth $10,000 or more. These attract competitive applicant pools — allow extra time for these essays and seek feedback before submitting.');
+    }
+
+    // Quick-win strategy
+    if(noEssayNoRef.length>=1&&noEssayNoRef.length<items.length){
+      advisorTips.push('Efficiency tip: '+noEssayNoRef.length+' of your scholarships require no essay or references. Completing these first is a low-effort way to make progress while saving capacity for the more demanding applications.');
+    }
+
+    // Writing support resources — based on essay requirement and major scope of items
+    const essayItems = items.filter(r=>r.essays);
+    if(essayItems.length >= 1){
+      // Classify essay items by how specific their major field is
+      const anyOnlyTerms = ['any'];
+      const businessFieldTerms = ['business','marketing','finance','accounting','supply chain','actuarial','design','architecture','information systems','cis tech','data science','computer science','engineering','stem','logistics'];
+      const isAnyOnly = r => {
+        const m = (r.majors||'').toLowerCase().trim();
+        return m === 'any' || m === 'any major';
+      };
+      const isBusiness = r => {
+        const m = (r.majors||'').toLowerCase();
+        return !isAnyOnly(r) && businessFieldTerms.some(t=>m.includes(t));
+      };
+      const businessEssayItems = essayItems.filter(r=>isBusiness(r));
+      const anyEssayItems = essayItems.filter(r=>isAnyOnly(r));
+      const hasBusiness = businessEssayItems.length >= 1;
+      const hasAny = anyEssayItems.length >= 1;
+      if(hasBusiness && hasAny){
+        advisorTips.push('Writing support: For your field-specific scholarships, the Business Communication Center (JSOM 12.106) can provide feedback on cover letters and essays tailored to business disciplines. For your open-major scholarships, the Writing Center (MC 1.310) offers free essay review for any subject. Both are available by appointment.');
+      } else if(hasBusiness){
+        advisorTips.push('Writing support: Your scholarship essays are primarily in a business or professional field. The Business Communication Center (JSOM 12.106) offers targeted feedback on cover letters and essays for business disciplines — consider scheduling a review before your earliest deadline.');
+      } else if(hasAny){
+        advisorTips.push('Writing support: Your selected scholarships are open to any major. The Writing Center (MC 1.310) offers free essay review and writing consultations — a useful resource before submitting any written application materials.');
+      } else if(essayItems.length >= 1){
+        // Field-specific but not caught above — generic essay advice
+        advisorTips.push('Writing support: Several of your scholarships require written statements. Consider requesting a peer or faculty review before submitting — strong application essays are typically revised multiple times.');
+      }
+    }
+
+    // Fallback
+    if(advisorTips.length===0){
+      advisorTips.push('Your cart is well-organized. Monitor each deadline closely and begin applications as early as possible — early submissions are rarely disadvantaged and allow time to address any unexpected requirements.');
+    }
+  }
+
+  // ── MINI CALENDAR (table-based, no CSS grid — for html2canvas compat) ──
+  function miniCal(closesStr,genDateObj){
+    if(!closesStr)return'';
+    const deadline=new Date(closesStr);deadline.setHours(0,0,0,0);
+    const daysLeft=Math.max(0,Math.round((deadline-genDateObj)/86400000));
+    const year=deadline.getFullYear();
+    const month=deadline.getMonth();
+    const day=deadline.getDate();
+    const monthNames=['January','February','March','April','May','June','July','August','September','October','November','December'];
+    const monthNamesShort=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+    const firstDow=new Date(year,month,1).getDay();
+    const daysInMonth=new Date(year,month+1,0).getDate();
+    const dayHeaders=['S','M','T','W','T','F','S'];
+    // Outer table so the whole block is fixed-width and renders correctly in html2canvas
+    let html='<table cellpadding="0" cellspacing="0" style="border-collapse:collapse;width:176px;background:#f8f6f2;border:1px solid #c8c3b5;border-radius:8px;">';
+    // Month + Year header row
+    html+='<tr><td colspan="7" style="text-align:center;font-weight:700;font-size:11px;color:#1a1a1a;padding:8px 10px 4px;text-transform:uppercase;letter-spacing:0.1em;border-bottom:1px solid #dedad0;">'+monthNamesShort[month]+' '+year+'</td></tr>';
+    // Day-of-week header row
+    html+='<tr>';
+    dayHeaders.forEach(h=>{html+='<td style="text-align:center;font-weight:700;color:#7a7060;font-size:8px;padding:3px 0;width:25px;">'+h+'</td>';});
+    html+='</tr>';
+    // Calendar days
+    let cellCount=0;
+    html+='<tr>';
+    for(let i=0;i<firstDow;i++){html+='<td style="padding:2px 0;"></td>';cellCount++;}
+    for(let d=1;d<=daysInMonth;d++){
+      if(cellCount>0&&cellCount%7===0){html+='</tr><tr>';}
+      const isDeadline=d===day;
+      const cellBg=isDeadline?'background:#b83232;color:#fff;font-weight:800;':'color:#1a1a1a;';
+      html+='<td style="text-align:center;padding:2px 0;"><div style="display:inline-block;width:17px;height:17px;line-height:17px;border-radius:3px;font-size:8px;'+cellBg+'">'+d+'</div></td>';
+      cellCount++;
+    }
+    while(cellCount%7!==0){html+='<td></td>';cellCount++;}
+    html+='</tr>';
+    // Days-remaining footer
+    const dColor=daysLeft<=14?'#b83232':daysLeft<=30?'#8a6a2a':'#2e6a4a';
+    const dLabel=daysLeft===0?'Due today':daysLeft===1?'1 day left':daysLeft+' days left';
+    html+='<tr><td colspan="7" style="text-align:center;padding:5px 10px 8px;border-top:1px solid #dedad0;"><span style="color:'+dColor+';font-weight:700;font-size:10px;">'+dLabel+'</span></td></tr>';
+    html+='</table>';
+    return html;
+  }
+
+  const genDateObj=new Date();genDateObj.setHours(0,0,0,0);
+
+  // ── RECEIPT LAYOUT ────────────────────────────────────────
+  wrap.innerHTML=`
+  <div style="background:#1a1a1a;padding:22px 32px 16px;">
+    <div style="font-family:'Playfair Display',serif;font-size:26px;font-weight:700;color:#f0ede6;margin-bottom:4px;">Scholarship Store Receipt</div>
+    <div style="font-size:11px;letter-spacing:0.1em;text-transform:uppercase;color:#9a9080;">University of Texas at Dallas &middot; RISE Center</div>
+  </div>
+  <div style="background:#2e2e2e;padding:10px 32px;display:flex;gap:32px;align-items:center;flex-wrap:wrap;">
+    <div><span style="font-size:10px;text-transform:uppercase;letter-spacing:0.08em;color:#c8b99a;font-weight:600;">Student&nbsp;</span><span style="color:#f0ede6;font-size:12px;">${firstName} ${lastName}</span></div>
+    <div><span style="font-size:10px;text-transform:uppercase;letter-spacing:0.08em;color:#c8b99a;font-weight:600;">Email&nbsp;</span><span style="color:#f0ede6;font-size:12px;">${email}</span></div>
+    ${major?`<div><span style="font-size:10px;text-transform:uppercase;letter-spacing:0.08em;color:#c8b99a;font-weight:600;">Major&nbsp;</span><span style="color:#f0ede6;font-size:12px;">${major}</span></div>`:''}
+    <div style="margin-left:auto;"><span style="font-size:10px;text-transform:uppercase;letter-spacing:0.08em;color:#c8b99a;font-weight:600;">Generated&nbsp;</span><span style="color:#f0ede6;font-size:12px;">${genDate}</span></div>
+  </div>
+  <div style="display:flex;border-bottom:1px solid #c8c3b5;">
+    ${[
+      {val:items.length,key:'Scholarships Saved'},
+      {val:totalAward>0?'$'+totalAward.toLocaleString():'—',key:'Max Award Value'},
+      {val:essaysNeeded,key:'Require Essay'},
+      {val:refsNeeded,key:'Require References'},
+      {val:avgDays!==null?avgDays+'d':'—',key:'Avg Days Remaining'},
+    ].map((s,i)=>`<div style="flex:1;text-align:center;padding:18px 8px;background:#edeae2;border-right:${i<4?'1px solid #c8c3b5':'none'};">
+      <div style="font-family:'Playfair Display',serif;font-size:26px;font-weight:700;color:#1a1a1a;">${s.val}</div>
+      <div style="font-size:9px;text-transform:uppercase;letter-spacing:0.1em;color:#7a7060;margin-top:4px;">${s.key}</div>
+    </div>`).join('')}
+  </div>
+  <div style="background:#1a1a1a;margin:0;padding:18px 32px;">
+    <div style="font-size:10px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:#c8b99a;margin-bottom:10px;">Application Guidance</div>
+    ${advisorTips.map(tip=>{
+      const isUrgent=tip.startsWith('⚠️');
+      return isUrgent
+        ?`<div style="font-size:11px;color:#f5c0c0;line-height:1.65;margin-bottom:9px;padding:7px 10px;border-left:3px solid #b83232;background:rgba(184,50,50,0.18);border-radius:0 4px 4px 0;">${tip}</div>`
+        :`<div style="font-size:11px;color:#e8e4db;line-height:1.65;margin-bottom:7px;padding-left:10px;border-left:2px solid #5a4a3a;">${tip}</div>`;
+    }).join('')}
+  </div>
+  <div style="padding:20px 32px 8px;">
+    <div style="font-size:9px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:#7a7060;border-bottom:2px solid #1a1a1a;padding-bottom:8px;margin-bottom:0;">Scholarships &amp; Competitions — Sorted by Deadline</div>
+    ${items.map((r,idx)=>{
+      const link=r.link&&r.link!=='nan'?(r.link.startsWith('http')?r.link:'https://'+r.link):'';
+      const dLeft=r.closes?Math.max(0,Math.round((new Date(r.closes)-genDateObj)/86400000)):null;
+      const dColor=dLeft===null?'#7a7060':dLeft<=14?'#b83232':dLeft<=30?'#8a6a2a':'#2e6a4a';
+      const calSnap=miniCal(r.closes,genDateObj);
+      const isEven=idx%2===0;
+      const rowBg=isEven?'#edeae2':'#e8e4da';
+      // Requirement flags as short inline text
+      const flags=[];
+      if(r.essays)flags.push('Essay');
+      if(r.refs)flags.push('References');
+      if(r.employee)flags.push('Employee Only');
+      if(r.citizen)flags.push('US Citizen/Resident');
+      if(r.projected)flags.push('Est. Dates');
+      if(r.gpa>0)flags.push('GPA '+r.gpa.toFixed(1)+'+');
+      const awardDisplay=r.trip?('Trip: '+r.awardRaw):r.awardRaw;
+      const awardColor=r.trip?'#8a6a2a':'#2e6a4a';
+      return `<table cellpadding="0" cellspacing="0" style="width:100%;border-collapse:collapse;background:${rowBg};border-bottom:1px solid #c8c3b5;">
+        <tr>
+          <td style="padding:12px 18px;vertical-align:middle;width:28px;font-family:'Playfair Display',serif;font-size:18px;font-weight:700;color:#c8c3b5;">${idx+1}</td>
+          <td style="padding:12px 8px 12px 0;vertical-align:top;">
+            <div style="font-family:'Playfair Display',serif;font-size:13px;font-weight:700;color:#1a1a1a;line-height:1.3;">${r.name}</div>
+            <div style="font-size:10px;color:#7a7060;margin-top:1px;margin-bottom:5px;">${r.org} &nbsp;&middot;&nbsp; <span style="font-size:9px;text-transform:uppercase;letter-spacing:0.06em;color:#5a4a3a;">${r.cat}</span>${flags.length>0?' &nbsp;&middot;&nbsp; <span style="font-size:9px;color:#7a7060;">'+flags.join(' &middot; ')+'</span>':''}</div>
+            <div style="font-size:11px;font-weight:700;color:${awardColor};">${awardDisplay}</div>
+            ${r.background?`<div style="font-size:10px;color:#50483e;line-height:1.55;margin-top:5px;margin-bottom:2px;">${r.background}</div>`:''}
+            ${link?`<div style="font-size:9px;color:#9a9080;margin-top:3px;">${link}</div>`:''}
+          </td>
+          <td style="padding:12px 18px 12px 8px;vertical-align:top;text-align:right;white-space:nowrap;">
+            ${calSnap}
+          </td>
+        </tr>
+      </table>`;
+    }).join('')}
+  </div>
+  ${(()=>{
+    // Only include scholarships that require essays/video OR references
+    const workflowItems=items.filter(r=>r.essays||r.refs);
+    if(workflowItems.length===0)return'';
+    function addDays(dateStr,d){const dt=new Date(dateStr);dt.setDate(dt.getDate()+d);return dt;}
+    function fmtDate(dt){const m=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];return m[dt.getMonth()]+' '+dt.getDate()+', '+dt.getFullYear();}
+    // Build a flat list of all deadline-relative internal tasks
+    const tasks=[];
+    workflowItems.forEach(r=>{
+      if(!r.closes)return;
+      const deadline=new Date(r.closes);
+      deadline.setHours(0,0,0,0);
+      const shortName=r.name.length>45?r.name.substring(0,45).trim()+'…':r.name;
+      if(r.refs){
+        const d=addDays(r.closes,-21);d.setHours(0,0,0,0);
+        tasks.push({date:d,label:'Contact recommender(s) for '+shortName,daysLeft:Math.round((deadline-genDateObj)/86400000),color:'#c8b99a',marker:'📨'});
+      }
+      if(r.essays){
+        const d=addDays(r.closes,-7);d.setHours(0,0,0,0);
+        tasks.push({date:d,label:'Have deliverable drafts done for '+shortName,daysLeft:Math.round((deadline-genDateObj)/86400000),color:'#c8b99a',marker:'✍️'});
+      }
+      if(r.essays||r.refs){
+        const d=addDays(r.closes,-2);d.setHours(0,0,0,0);
+        tasks.push({date:d,label:'Have deliverables reviewed for '+shortName,daysLeft:Math.round((deadline-genDateObj)/86400000),color:'#c8b99a',marker:'✅'});
+      }
+    });
+    // Sort by internal deadline date
+    tasks.sort((a,b)=>a.date-b.date);
+    // Separate overdue/past vs upcoming
+    const today=genDateObj;
+    const upcoming=tasks.filter(t=>t.date>=today);
+    const past=tasks.filter(t=>t.date<today);
+    const renderTask=(t,dim)=>{
+      const daysUntil=Math.round((t.date-today)/86400000);
+      const isPast=daysUntil<0;
+      const isSoon=daysUntil>=0&&daysUntil<=7;
+      const dotColor=isPast?'#7a7060':isSoon?'#b83232':'#2e6a4a';
+      const textColor=dim?'#7a7060':isPast?'#7a7060':'#e8e4db';
+      const urgency=isPast?'<span style="font-size:9px;color:#7a7060;margin-left:6px;">(past)</span>':isSoon?'<span style="font-size:9px;color:#b83232;font-weight:700;margin-left:6px;">Due soon</span>':'';
+      const checkbox=`<div style="width:11px;height:11px;border:1.5px solid ${dim?'#555':'#888'};border-radius:2px;display:inline-block;flex-shrink:0;margin-top:1px;"></div>`;
+      return `<tr>
+        <td style="padding:4px 10px 4px 0;vertical-align:top;white-space:nowrap;font-size:10px;color:${dim?'#7a7060':'#9a9080'};">${fmtDate(t.date)}</td>
+        <td style="padding:4px 0;vertical-align:top;width:6px;"><div style="width:6px;height:6px;border-radius:50%;background:${dotColor};margin-top:3px;"></div></td>
+        <td style="padding:4px 0 4px 8px;font-size:10px;color:${textColor};line-height:1.5;">${t.marker} ${t.label}${urgency}</td>
+        <td style="padding:4px 0 4px 12px;vertical-align:top;text-align:right;">${checkbox}</td>
+      </tr>`;
+    };
+    return `<div style="background:#232323;padding:18px 32px 20px;">
+      <div style="font-size:10px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:#c8b99a;margin-bottom:12px;">Schedule Recommendation</div>
+      <div style="font-size:10px;color:#9a9080;margin-bottom:12px;line-height:1.5;">These are suggested dates — adjust based on your personal capacity.</div>
+      <table cellpadding="0" cellspacing="0" style="border-collapse:collapse;width:100%;">
+        ${upcoming.map(t=>renderTask(t,false)).join('')}
+        ${past.length>0?`<tr><td colspan="4" style="padding:6px 0 4px;"><div style="border-top:1px solid #3a3a3a;margin-top:2px;margin-bottom:2px;"></div></td></tr>`:''}
+        ${past.map(t=>renderTask(t,true)).join('')}
+      </table>
+    </div>`;
+  })()}
+  <div style="background:#1a1a1a;padding:12px 32px;display:flex;justify-content:space-between;align-items:center;">
+    <span style="font-size:10px;color:#9a9080;">Scholarship Store Receipt &middot; University of Texas at Dallas</span>
+    <span style="font-size:10px;color:#9a9080;">${firstName} ${lastName}</span>
+  </div>`;
+
+  document.body.appendChild(wrap);
+
+  html2canvas(wrap,{
+    scale:2,
+    useCORS:true,
+    allowTaint:true,
+    backgroundColor:'#f0ede6',
+    logging:false,
+    windowWidth:900,
+  }).then(canvas=>{
+    document.body.removeChild(wrap);
+    const baseName=firstName+'_'+lastName+'_Scholarship_Receipt';
+    const link=document.createElement('a');
+    link.download=baseName+'.png';
+    link.href=canvas.toDataURL('image/png');
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  }).catch(err=>{
+    document.body.removeChild(wrap);
+    console.error('Receipt generation failed:',err);
+    alert('Receipt generation failed. Please try again.');
+  });
+}
+
+// ── BACKEND ───────────────────────────────────────────────────
+function renderBackend(){
+  if(!document.getElementById('backendContent').classList.contains('show'))return;
+  const tbody=document.getElementById('backendTbody');
+  tbody.innerHTML=checkoutLog.length===0
+    ?'<tr><td colspan="5" style="text-align:center;color:var(--muted);padding:30px">No checkout records yet.</td></tr>'
+    :checkoutLog.slice().reverse().map((e,i)=>'<tr>'
+      +'<td>'+(checkoutLog.length-i)+'</td>'
+      +'<td><strong>'+e.name+'</strong></td>'
+      +'<td>'+e.email+'</td>'
+      +'<td>'+e.datetime+'</td>'
+      +'<td style="text-align:center;font-weight:700;">'+e.count+'</td>'+'<td style="max-width:320px;word-break:break-word;font-size:0.72rem;color:var(--muted)">'+e.scholarships.split('; ').map((s,i)=>'<div style="padding:1px 0">'+(i+1)+'. '+s+'</div>').join('')+'</td>'
+      +'</tr>').join('');
+  // Stats
+  const unique=new Set(checkoutLog.map(e=>e.email)).size;
+  const avgCount=checkoutLog.length>0?Math.round(checkoutLog.reduce((s,e)=>s+e.count,0)/checkoutLog.length):0;
+  document.getElementById('backendStats').innerHTML=
+    '<div class="b-stat"><div class="b-stat-val">'+checkoutLog.length+'</div><div class="b-stat-key">Total Checkouts</div></div>'
+    +'<div class="b-stat"><div class="b-stat-val">'+unique+'</div><div class="b-stat-key">Unique Students</div></div>'
+    +'<div class="b-stat"><div class="b-stat-val">'+avgCount+'</div><div class="b-stat-key">Avg Scholarships / Checkout</div></div>';
+}
+function exportToCSV(){
+  if(checkoutLog.length===0){alert('No data to export.');return;}
+  const rows=[['#','Name','UTD Email','Date & Time','Scholarship Count','Scholarships']];
+  checkoutLog.forEach((e,i)=>rows.push([i+1,e.name,e.email,e.datetime,e.count,'"'+e.scholarships.replace(/"/g,'""')+'"']));
+  const csv=rows.map(r=>r.join(',')).join('\n');
+  const blob=new Blob([csv],{type:'text/csv'});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement('a');
+  a.href=url;
+  const d=new Date();
+  a.download='RISE_Scholarship_Checkouts_'+d.getFullYear()+('0'+(d.getMonth()+1)).slice(-2)+('0'+d.getDate()).slice(-2)+'.csv';
+  document.body.appendChild(a);a.click();document.body.removeChild(a);
+  setTimeout(()=>URL.revokeObjectURL(url),1000);
+}
+function clearAdminData(){
+  if(!confirm('Are you sure you want to delete all checkout records? This cannot be undone.'))return;
+  checkoutLog=[];saveLog();renderBackend();
+}
+
+// ── FILTERS ───────────────────────────────────────────────────
+function setupChips(id,key){
+  document.getElementById(id).addEventListener('click',e=>{
+    if(!e.target.classList.contains('chip'))return;
+    document.querySelectorAll('#'+id+' .chip').forEach(c=>c.classList.remove('active'));
+    e.target.classList.add('active');state[key]=e.target.dataset.val;render();
+  });
+}
+function toggleFilter(key){
+  tog[key]=!tog[key];
+  document.getElementById('toggle'+key.charAt(0).toUpperCase()+key.slice(1)).classList.toggle('on',tog[key]);render();
+}
+function resetAll(){
+  state.year='all';state.gpa='';state.major='all';state.status='all';state.semester='all';state.sort='deadline';state.sortDir=1;
+  Object.keys(tog).forEach(k=>tog[k]=false);
+  tog.expired=true; // Hide expired by default
+  document.getElementById('gpaInput').value='';
+  ['yearChips','majorChips','statusChips','semesterChips'].forEach(id=>
+    document.querySelectorAll('#'+id+' .chip').forEach((c,i)=>c.classList.toggle('active',i===0))
+  );
+  ['toggleRef','toggleEssay','toggleEmployee','toggleProjected'].forEach(id=>
+    document.getElementById(id).classList.remove('on')
+  );
+  // Reset sort chips and arrows
+  document.querySelectorAll('.sort-chip').forEach(c=>{
+    c.classList.remove('active');
+    const arr=c.querySelector('.sort-arrow');
+    if(arr)arr.textContent='';
+  });
+  const defaultChip=document.querySelector('.sort-chip[data-sort="deadline"]');
+  if(defaultChip){defaultChip.classList.add('active');const arr=defaultChip.querySelector('.sort-arrow');if(arr)arr.textContent='↑';}
+  document.getElementById('toggleExpired').classList.add('on');render();
+}
+document.querySelectorAll('.sort-chip').forEach(chip=>{
+  chip.addEventListener('click',()=>{
+    const isSame=chip.classList.contains('active');
+    if(isSame){
+      // Toggle direction
+      state.sortDir*=-1;
+    } else {
+      // Switch to new sort, default direction
+      document.querySelectorAll('.sort-chip').forEach(c=>{
+        c.classList.remove('active');
+        const arr=c.querySelector('.sort-arrow');
+        if(arr)arr.textContent='';
+      });
+      chip.classList.add('active');
+      state.sort=chip.dataset.sort;
+      state.sortDir=1;
+    }
+    // Update arrow on active chip
+    const arr=chip.querySelector('.sort-arrow');
+    if(arr)arr.textContent=state.sortDir===1?'↑':'↓';
+    render();
+  });
+});
+setupChips('yearChips','year');setupChips('majorChips','major');
+setupChips('statusChips','status');setupChips('semesterChips','semester');
+document.getElementById('gpaInput').addEventListener('input',e=>{state.gpa=e.target.value;render();});
+// Initialize toggles that start as ON
+document.getElementById('toggleExpired').classList.add('on');
+render();
+</script>
+</body>
+</html>
